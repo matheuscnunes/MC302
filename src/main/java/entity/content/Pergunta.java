@@ -1,5 +1,7 @@
 package main.java.entity.content;
 
+import main.java.entity.member.Usuario;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,9 +12,8 @@ public class Pergunta extends Post {
 
     private List<Comentario> comentarios;
 
-    // TODO Add Usuario autor
-    public Pergunta(int id, Date date, String pergunta) {
-        super(id, date);
+    public Pergunta(int id, Date date, Usuario autor, String pergunta) {
+        super(id, date, autor);
         this.pergunta = pergunta;
         this.comentarios = new ArrayList<>();
     }

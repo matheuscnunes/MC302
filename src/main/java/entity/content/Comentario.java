@@ -1,5 +1,7 @@
 package main.java.entity.content;
 
+import main.java.entity.member.Usuario;
+
 import java.util.Date;
 
 public class Comentario extends Post {
@@ -10,9 +12,8 @@ public class Comentario extends Post {
 
     private String correcao;
 
-    // TODO Add Usuario autor
-    public Comentario(int id, Date data, String comentario, Boolean eRelevante, String correcao) {
-        super(id, data);
+    public Comentario(int id, Date data, Usuario autor, String comentario, Boolean eRelevante, String correcao) {
+        super(id, data, autor);
         this.comentario = comentario;
         this.eRelevante = eRelevante;
         this.correcao = correcao;

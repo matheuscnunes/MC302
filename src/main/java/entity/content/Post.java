@@ -1,21 +1,23 @@
 package main.java.entity.content;
 
+import main.java.entity.member.Usuario;
+
 import java.util.Date;
 
 public class Post {
 
     private final int ID;
 
-//    private Usuario autor;
+    private Usuario autor;
 
     private Date date;
 
     private int denuncias;
 
     // TODO Add Usuario autor
-    protected Post (int ID, Date date) {
+    protected Post (int ID, Date date, Usuario autor) {
         this.ID = ID;
-//        this.autor = autor;
+        this.autor = autor;
         this.date = date;
         denuncias = 0;
     }
@@ -33,13 +35,13 @@ public class Post {
         return ID;
     }
 
-//    public Usuario getAutor() {
-//        return autor;
-//    }
+    public Usuario getAutor() {
+        return autor;
+    }
 
-//    public void setAutor(Usuario autor) {
-//        this.autor = autor;
-//    }
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
+    }
 
     public Date getDate() {
         return date;
