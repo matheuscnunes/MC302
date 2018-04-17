@@ -1,4 +1,7 @@
-package main.java;
+package main.java.entity;
+
+import main.java.entity.content.Post;
+import main.java.entity.member.*;
 
 import java.util.List;
 

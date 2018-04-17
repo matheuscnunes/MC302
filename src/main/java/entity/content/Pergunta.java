@@ -1,4 +1,4 @@
-package main.java;
+package main.java.entity.content;
 
 import java.util.ArrayList;
 import java.util.Date;
