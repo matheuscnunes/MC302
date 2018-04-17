@@ -1,6 +1,10 @@
-package main.java;
+package main.java.entity;
 
-import entity.Disciplina;
+import main.java.entity.member.Aluno;
+import main.java.entity.member.Monitor;
+import main.java.entity.member.Professor;
+import main.java.entity.member.Usuario;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +42,10 @@ public class Gerenciador {
     public static void adicionarAluno(Aluno aluno){
         if(aluno == null) throw new NullPointerException("[Adicionar Aluno] O aluno a ser adicionado não pode ser nulo");
 
-        Aluno alunoEncontrado = buscaAluno(aluno.getRA());
+        Aluno alunoEncontrado = buscaAluno(aluno.ra);
 
         if(alunoEncontrado != null){
-            throw new Error("[Adicionar Aluno] Aluno com RA " + aluno.getRA() + " já existe.");
+            throw new Error("[Adicionar Aluno] Aluno com RA " + aluno.ra + " já existe.");
         }
 
         alunos.add(aluno);
@@ -65,7 +69,7 @@ public class Gerenciador {
 
     public static Aluno buscaAluno(int ra){
         List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> {
-            return aluno.getRA() == ra;
+            return aluno.ra == ra;
         }).collect(Collectors.toList());
 
         if(alunosEncontrados.size() >= 1){
@@ -102,7 +106,7 @@ public class Gerenciador {
 
     public static Professor buscaProfessor(int id){
         List<Professor> professoresAchados = professores.stream().filter(professor -> {
-            return professor.getID() == id;
+            return professor.id == id;
         }).collect(Collectors.toList());
 
         if(professoresAchados.size() >= 1){
@@ -139,7 +143,7 @@ public class Gerenciador {
 
     public static Monitor buscaMonitor(int ra){
         List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
-            return monitor.getRA() == ra;
+            return monitor.ra == ra;
         }).collect(Collectors.toList());
 
         if(monitorersAchados.size() >= 1){
