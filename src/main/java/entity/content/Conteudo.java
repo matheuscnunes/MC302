@@ -1,5 +1,7 @@
 package main.java.entity.content;
 
+import main.java.entity.member.Usuario;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +24,8 @@ public class Conteudo extends Post {
         return comentarios;
     }
 
-    // TODO Add Usuario autor
-    public Conteudo(int ID, Date date, String conteudo) {
-        super(ID, date);
+    public Conteudo(int ID, Date date, Usuario autor, String conteudo) {
+        super(ID, date, autor);
         this.conteudo = conteudo;
         comentarios = new ArrayList<>();
     }
