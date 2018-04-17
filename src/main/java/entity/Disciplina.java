@@ -145,21 +145,21 @@ public class Disciplina {
     }
 
     // Main apenas para teste da classe Disciplina. Retirar depois.
-    public static void main(String args[]) {
-        try {
-            Disciplina disciplina1 = new Disciplina(10, "Fundamentos matemáticos da computação", "MC358");
-            System.out.println(disciplina1.toString());
-            Turma turma = new Turma();
-            disciplina1.adicinarTurma(turma);
-            if (!disciplina1.removerTurma(turma)) {
-                System.out.println("Turma já existente para remoção");
-            }
-            List<Turma> turmas = new ArrayList<Turma>();
-            turmas.add(new Turma());
-            Disciplina disciplina2 = new Disciplina(20, "Calculo III", "MA311", turmas);
-            System.out.println(disciplina2.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String args[]) {
+//        try {
+//            Disciplina disciplina1 = new Disciplina(10, "Fundamentos matemáticos da computação", "MC358");
+//            System.out.println(disciplina1.toString());
+//            Turma turma = new Turma();
+//            disciplina1.adicinarTurma(turma);
+//            if (!disciplina1.removerTurma(turma)) {
+//                System.out.println("Turma já existente para remoção");
+//            }
+//            List<Turma> turmas = new ArrayList<Turma>();
+//            turmas.add(new Turma());
+//            Disciplina disciplina2 = new Disciplina(20, "Calculo III", "MA311", turmas);
+//            System.out.println(disciplina2.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
