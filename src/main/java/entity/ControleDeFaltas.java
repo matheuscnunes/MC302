@@ -2,60 +2,26 @@ package main.java.entity;
 
 public class ControleDeFaltas {
 
-    private int id, ano, numeroFaltas;
-    private Semestre semestre;
-    private Disciplina disciplina;
+    public final int id;
+    private int numeroFaltas;
+    private Turma turma;
 
     public ControleDeFaltas() {
         this.id = 0;
-        this.ano = 0;
-        this.semestre = Semestre.PRIMEIRO;
         this.numeroFaltas = 0;
     }
 
-    public ControleDeFaltas(int id, Disciplina disciplina, int ano, Semestre semestre, int numeroFaltas) throws Exception {
-        this.setId(id);
-        this.setDisciplina(disciplina);
-        this.setAno(ano);
-        this.setSemestre(semestre);
+    public ControleDeFaltas(int id, Turma turma, int numeroFaltas) throws Exception {
+        if (id <= 0) {
+            throw new Exception("Id da disciplina deve ser positivo!");
+        }
+        this.id = id; //TODO: alterar para um gerador de IDs, assim a verificação não será mais necessária
+        this.setTurma(turma);
         this.setNumeroFaltas(numeroFaltas);
     }
 
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) throws Exception {
-        if (id <= 0) {
-            throw new Exception("Id da disciplina inválido em setId");
-        }
-        this.id = id;
-    }
-
-    public int getAno() {
-        return this.ano;
-    }
-
-    public void setAno(int ano) throws Exception {
-        if (ano <= 0) {
-            throw new Exception("Ano inválido para o controle de faltas em setAno");
-        }
-        this.ano = ano;
-    }
-
-    public Semestre getSemestre() {
-        return this.semestre;
-    }
-
-    public void setSemestre(Semestre semestre) throws Exception {
-        if (semestre == null) {
-            throw new Exception("Semestre não fornecido para o controle de faltas em setSemestre");
-        }
-        this.semestre = semestre;
-    }
-
     public int getNumeroFaltas() {
-        return this.numeroFaltas;
+        return numeroFaltas;
     }
 
     public void setNumeroFaltas(int numeroFaltas) throws Exception {
@@ -65,22 +31,22 @@ public class ControleDeFaltas {
         this.numeroFaltas = numeroFaltas;
     }
 
-    public Disciplina getDisciplina() {
-        return this.disciplina;
+    public Turma getTurma() {
+        return turma;
     }
 
-    public void setDisciplina(Disciplina disciplina) throws Exception {
-        if (disciplina == null) {
-            throw new Exception("Disciplina não instanciada para o controle de faltas em setDisciplina");
+    public void setTurma(Turma turma) throws Exception {
+        if (turma == null) {
+            throw new Exception("Turma não instanciada para o controle de faltas em setTurma");
         }
-        this.disciplina = disciplina;
+        this.turma = turma;
     }
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof ControleDeFaltas) {
             ControleDeFaltas controleDeFaltas = (ControleDeFaltas) object;
-            if (this.id == controleDeFaltas.getId()) {
+            if (this.id == controleDeFaltas.id) {
                 return true;
             }
         }
@@ -89,10 +55,10 @@ public class ControleDeFaltas {
 
     @Override
     public String toString() {
-        String str = this.ano + ", " + this.semestre.toString() + " SEMESTRE";
-        if (this.disciplina != null && this.disciplina.getCodigo() != null &&
-                !this.disciplina.getCodigo().trim().equals("")) {
-            str += ", " + this.disciplina.getCodigo();
+        String str = turma.getAno() + ", " + turma.getSemestre().toString() + " SEMESTRE";
+        if (turma.getDisciplina() != null && turma.getDisciplina().getCodigo() != null &&
+                !turma.getDisciplina().getCodigo().trim().equals("")) {
+            str += ", " + turma.getDisciplina().getCodigo();
         }
         str += ", ";
         if (this.numeroFaltas <= 0) {
@@ -101,24 +67,5 @@ public class ControleDeFaltas {
             str += this.numeroFaltas + " " + ((this.numeroFaltas > 1) ? "faltas" : "falta");
         }
         return str;
-    }
-
-    // Main apenas para teste da classe ControleDeFaltas. Retirar depois
-    public static void main(String args[]) {
-        try {
-            ControleDeFaltas controleDeFaltas1 = new ControleDeFaltas(20,
-                    new Disciplina(29, "Cálculo III", "MA311"), 2018, Semestre.PRIMEIRO, 0);
-            System.out.println(controleDeFaltas1.toString());
-
-            ControleDeFaltas controleDeFaltas2 = new ControleDeFaltas(25,
-                    new Disciplina(39, "Cálculo II", "MA345"), 2017, Semestre.SEGUNDO, 1);
-            System.out.println(controleDeFaltas2.toString());
-
-            ControleDeFaltas controleDeFaltas3 = new ControleDeFaltas(26,
-                    new Disciplina(49, "Cálculo Numérico", "MA356"), 2018, Semestre.PRIMEIRO, 26);
-            System.out.println(controleDeFaltas3.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
