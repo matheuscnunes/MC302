@@ -2,8 +2,9 @@ package main.java.entity.member;
 
 public final class Professor extends Usuario {
 
-    protected Professor(int id, int tipoUsuario) {
-        super(id, tipoUsuario);
+    //, int tipoUsuario
+    protected Professor(int id, String nome, String email, String senha) {
+        super(id, nome, email, senha);
     }
 
     @Override

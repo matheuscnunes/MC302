@@ -9,8 +9,10 @@ public class Aluno extends Usuario {
     private int curso;
     private ArrayList<ControleDeFaltas> controladoresDeFaltas;
 
-    public Aluno(int id, int tipoUsuario, int ra, int curso) {
-        super(id, tipoUsuario);
+    // TODO (matheuss-nunes): faz sentido tipoUsuario?
+    // , int tipoUsuario
+    public Aluno(int id, int ra, int curso, String nome, String email, String senha) {
+        super(id, nome, email, senha);
         this.ra = ra;
         this.curso = curso;
         controladoresDeFaltas = new ArrayList<ControleDeFaltas>();
@@ -45,6 +47,19 @@ public class Aluno extends Usuario {
         controladoresDeFaltas.add(removerControlador);
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Aluno{" +
+                "ra=" + ra +
+                ", curso=" + curso +
+                ", controladoresDeFaltas=" + controladoresDeFaltas +
+                ", id=" + id +
+                ", nome=" + getNome() +
+                ", email=" + getEmail() +
+                '}';
+    }
+
 
     @Override
     public boolean equals(Object obj) {
