@@ -7,11 +7,16 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-    private int tipoUsuario; //TODO: tipoUsuario deve ser um enumerador
+    // TODO (matheus-nunes): faz sentido o atributo tipoUsuario? Lembro do freitas ter questionado
+//    private int tipoUsuario; //TODO: tipoUsuario deve ser um enumerador
 
-    protected Usuario(int id, int tipoUsuario) {
+    protected Usuario(int id, String nome, String email, String senha) {
         this.id = id;
-        this.tipoUsuario = tipoUsuario;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        // TODO (matheus-nunes): faz sentido o atributo tipoUsuario? Lembro do freitas ter questionado
+//        this.tipoUsuario = tipoUsuario;
     }
 
     //getters e setters
@@ -45,13 +50,14 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public int getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(int tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
+    // TODO (matheus-nunes): faz sentido o atributo tipoUsuario? Lembro do freitas ter questionado
+//    public int getTipoUsuario() {
+//        return tipoUsuario;
+//    }
+//
+//    public void setTipoUsuario(int tipoUsuario) {
+//        this.tipoUsuario = tipoUsuario;
+//    }
 
     //helpers
     private boolean isEmail(String email) {

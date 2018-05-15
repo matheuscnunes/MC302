@@ -7,8 +7,9 @@ import java.util.ArrayList;
 public final class Monitor extends Aluno {
     private ArrayList<Turma> monitorias;
 
-    public Monitor(int id, int tipoUsuario, int ra, int curso) {
-        super(id, tipoUsuario, ra, curso);
+    // , int tipoUsuario
+    public Monitor(int id, int ra, int curso, String nome, String email, String senha) {
+        super(id, ra, curso, nome, email, senha);
         monitorias = new ArrayList<Turma>();
     }
 
