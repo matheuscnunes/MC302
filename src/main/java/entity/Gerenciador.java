@@ -39,6 +39,18 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Alunos  ///////////////////////
+    public static void adicionarUsuatio(Usuario user) {
+        if(user == null) throw new NullPointerException("[Adicionar Usuario] O usuario a ser adicionado não pode ser nulo");
+        if(user instanceof Aluno)
+            adicionarAluno((Aluno)user);
+        else if(user instanceof Professor)
+            adicionarProfessor((Professor)user);
+        else if(user instanceof Monitor)
+            adicionarMonitor((Monitor)user);
+        else
+            throw new Error("User deve ser uma instância de Aluno, Professor ou Monitor.");
+    }
+
     public static void adicionarAluno(Aluno aluno){
         if(aluno == null) throw new NullPointerException("[Adicionar Aluno] O aluno a ser adicionado não pode ser nulo");
 
@@ -95,7 +107,11 @@ public class Gerenciador {
     public static void adicionarProfessor(Professor professor){
         if(professor == null) throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
 
-        //Validar se professor já existe na lista de professores antes de inserir
+        Professor professorEncontrado = buscaProfessor(professor.getEmail());
+
+        if(professorEncontrado != null){
+            throw new Error("[Adicionar Professor] Professor com email " + professor.getEmail() + " já existe.");
+        }
 
         professores.add(professor);
     }
@@ -119,6 +135,18 @@ public class Gerenciador {
     public static Professor buscaProfessor(int id){
         List<Professor> professoresAchados = professores.stream().filter(professor -> {
             return professor.id == id;
+        }).collect(Collectors.toList());
+
+        if(professoresAchados.size() >= 1){
+            return professoresAchados.get(0);
+        }
+
+        return null;
+    }
+
+    public static Professor buscaProfessor(String email){
+        List<Professor> professoresAchados = professores.stream().filter(professor -> {
+            return professor.getEmail().equals(email);
         }).collect(Collectors.toList());
 
         if(professoresAchados.size() >= 1){
@@ -156,6 +184,18 @@ public class Gerenciador {
     public static Monitor buscaMonitor(int ra){
         List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
             return monitor.ra == ra;
+        }).collect(Collectors.toList());
+
+        if(monitorersAchados.size() >= 1){
+            return monitorersAchados.get(0);
+        }
+
+        return null;
+    }
+
+    public static Monitor buscaMonitor(String email){
+        List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
+            return monitor.getEmail().equals(email);
         }).collect(Collectors.toList());
 
         if(monitorersAchados.size() >= 1){

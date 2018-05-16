@@ -25,21 +25,25 @@ public class LoginInterface extends Interface {
     }
 
     private Usuario validarLogin(String email, String senha) {
+        Usuario user = null;
         switch (TIPO_USUARIO) {
             case ALUNO:
-                Aluno aluno = Gerenciador.buscaAluno(email);
-                if(aluno == null) {
-                    System.out.println("Não foi encontrado aluno cadastrado com esse email!");
-                    return null;
-                }
-                if(aluno.getSenha().equals(senha))
-                    return aluno;
-                return null;
+                user = Gerenciador.buscaAluno(email);
+                break;
             case PROFESSOR:
-                return null;
+                user = Gerenciador.buscaProfessor(email);
+                break;
             case MONITOR:
-                return null;
+                user = Gerenciador.buscaMonitor(email);
+                break;
         }
+        if(user == null) {
+            System.out.println("Não foi encontrado aluno cadastrado com esse email!");
+            return null;
+        }
+        if(user.getSenha().equals(senha))
+            return user;
+        System.out.println("Senha incorreta! Tente novamente.");
         return null;
     }
 }
