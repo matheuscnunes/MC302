@@ -1,4 +1,4 @@
-package main.java.main;
+package main.java.Interface;
 
 import main.java.entity.Gerenciador;
 import main.java.entity.member.Aluno;
@@ -88,14 +88,14 @@ public class PrincipalAluno {
         return Integer.parseInt(strCurso);
     }
 
-    private static String obtemEmail(Scanner input) {
+    public static String obtemEmail(Scanner input) {
         String email = "";
         do {
             if (!email.trim().equals("")) {
-                System.out.println("Email inválido");
+                System.out.println("E-mail inválido");
             }
 
-            System.out.println("Digite o email:");
+            System.out.print("\nDigite seu e-mail: ");
             email = input.next();
 
         } while (!Utils.validateEmail(email));

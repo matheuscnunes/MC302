@@ -79,6 +79,18 @@ public class Gerenciador {
         return null;
     }
 
+    public static Aluno buscaAluno(String email){
+        List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> {
+            return aluno.getEmail().equals(email);
+        }).collect(Collectors.toList());
+
+        if(alunosEncontrados.size() >= 1){
+            return alunosEncontrados.get(0);
+        }
+
+        return null;
+    }
+
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor){
         if(professor == null) throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
