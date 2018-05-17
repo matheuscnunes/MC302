@@ -32,6 +32,8 @@ public class Gerenciador {
 
     private static boolean verifyLoginAdmin(String email, String senha){
         if(email.equals("admin") && senha.equals("admin")){
+            Usuario admin = new Aluno(1,1,1,"admin","admin","admin");
+            usuarioAtual = admin;
             return true;
         }
 
@@ -151,7 +153,7 @@ public class Gerenciador {
 
     public static List<Conteudo>  buscaConteudos(String autor){
         return conteudos.stream().filter(conteudo -> {
-            return conteudo.getAutor().getNome().contains(autor);
+            return conteudo.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
     }
 

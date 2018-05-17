@@ -36,9 +36,6 @@ public class PrincipalLogin {
 
         senha = obtemSenha(input);
 
-        System.out.println("email:" + email);
-        System.out.println("senha:" + senha);
-
         return Gerenciador.login(email, senha);
     }
 

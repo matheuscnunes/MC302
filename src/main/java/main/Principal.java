@@ -53,7 +53,9 @@ public class Principal {
             System.out.println("1 - Aluno");
             System.out.println("2 - Professor");
             System.out.println("3 - Monitor");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Conteúdo");
+            System.out.println("5 - Pergunta");
+            System.out.println("6 - Sair");
         }
     }
 }
