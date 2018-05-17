@@ -1,11 +1,14 @@
 package main.java.Interface;
 
 import main.java.entity.member.Usuario;
+import main.java.main.PrincipalAluno;
+import main.java.main.PrincipalConteudo;
+import main.java.main.PrincipalDisciplina;
 
 import java.util.Scanner;
 
 enum OpcoesBoasVindas {
-    ALUNO, MONITOR, PROFESSOR, SAIR;
+    ALUNO, MONITOR, PROFESSOR, CONTEUDO, PERGUNTA, DISCIPLINA, SAIR;
 }
 
 enum TipoDeUsuario {
@@ -56,6 +59,17 @@ public class TelaInicialInterface extends Interface {
                     case MONITOR:
                         mostrarLoginCadastrar(TipoDeUsuario.MONITOR);
                         break;
+                    case CONTEUDO:
+                        System.out.println("Conteúdo");
+                        PrincipalConteudo.main(input);
+                        break;
+                    case PERGUNTA:
+                        System.out.println("Pergunta");
+                        break;
+                    case DISCIPLINA:
+                        System.out.println("Disciplina");
+                        PrincipalDisciplina.main(input);
+                        break;
                     case SAIR:
                         System.out.println("Bye JAVAlis");
                         return;
@@ -65,13 +79,17 @@ public class TelaInicialInterface extends Interface {
                 }
             }
         }
+
     }
 
     private void mostrarOpcoesBoasVindas() {
         System.out.println("1 - Aluno");
         System.out.println("2 - Monitor");
         System.out.println("3 - Professor");
-        System.out.println("4 - Sair");
+        System.out.println("4 - Conteúdo");
+        System.out.println("5 - Pergunta");
+        System.out.println("6 - Disciplina");
+        System.out.println("7 - Sair");
     }
 
     private void mostrarLoginCadastrar(TipoDeUsuario tipoUsuario) {

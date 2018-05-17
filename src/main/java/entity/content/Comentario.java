@@ -12,6 +12,14 @@ public class Comentario extends Post {
 
     private String correcao;
 
+
+    public Comentario(int id, Date data, Usuario autor, String comentario){
+        super(id, data, autor);
+        this.comentario = comentario;
+        this.isRelevante = true;
+        this.correcao = "";
+    }
+
     public Comentario(int id, Date data, Usuario autor, String comentario, Boolean isRelevante, String correcao) {
         super(id, data, autor);
         this.comentario = comentario;
