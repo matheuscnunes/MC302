@@ -90,6 +90,7 @@ public class TelaInicialInterface extends Interface {
             case 2:
                 CadastrarInterface cadastro = new CadastrarInterface(input, tipoUsuario);
                 cadastro.apresentarCadastro();
+                mostrarLoginCadastrar(tipoUsuario);
                 break;
             case 3:
                 boasVindas();
