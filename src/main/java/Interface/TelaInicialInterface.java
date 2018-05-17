@@ -69,8 +69,8 @@ public class TelaInicialInterface extends Interface {
 
     private void mostrarOpcoesBoasVindas() {
         System.out.println("1 - Aluno");
-        System.out.println("2 - Professor");
-        System.out.println("3 - Monitor");
+        System.out.println("2 - Monitor");
+        System.out.println("3 - Professor");
         System.out.println("4 - Sair");
     }
 
