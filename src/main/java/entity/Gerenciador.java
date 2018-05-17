@@ -10,6 +10,7 @@ import main.java.entity.member.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
@@ -29,12 +30,45 @@ public class Gerenciador {
 
     ////////////         Métodos de gerenciamento de Login  ///////////////////////
 
+    private static boolean verifyLoginAdmin(String email, String senha){
+        if(email.equals("admin") && senha.equals("admin")){
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean login(String email, String senha){
-        //verifica nas listas se existe algum usuário com o email e senha recebidos no método
+        if( verifyLoginAdmin(email, senha) == true){
+            System.out.println("****** Admin logged ******");
+            return true;
+        };
 
-        //se encontrar, altera o atributo usuarioAtual e retorna true
+        Predicate<Usuario> predicate = usuario -> {
+            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
+        };
 
-        //se não encontrar, retorna false
+        List<Aluno> alunosAchados = alunos.stream().filter(predicate).collect(Collectors.toList());
+        List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
+        List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
+
+        List<Usuario> usersAchados = new ArrayList<>();
+        usersAchados.addAll(alunosAchados);
+        usersAchados.addAll(profsAchados);
+        usersAchados.addAll(monitoresAchados);
+
+        if(usersAchados.size() < 1){
+            System.out.println("Não foi encontrado usuário cadastrado com o email ("+email+") e senha ("+senha+")");
+            return false;
+        }
+
+        if(usersAchados.size() > 1){
+            System.out.println("Foram encontrados vários usuários com o email ("+email+") e senha ("+senha+") : " + usersAchados.toString()+". Será utilizado somente o primeiro.");
+            usuarioAtual = usersAchados.get(0);
+            return true;
+        }
+
+        usuarioAtual = usersAchados.get(0);
         return true;
     }
 
@@ -46,6 +80,10 @@ public class Gerenciador {
         Usuario usuarioLogado = usuarioAtual;
         usuarioAtual = null;
         return usuarioLogado;
+    }
+
+    public static Usuario getUsarioAtual(){
+        return usuarioAtual;
     }
 
     ////////////         Métodos de gerenciamento de Alunos  ///////////////////////
