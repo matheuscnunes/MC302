@@ -54,6 +54,7 @@ public class PrincipalDisciplina {
         try {
             Disciplina disc = new Disciplina(id, nome, codigo);
             Gerenciador.adicionarDisciplina(disc);
+            System.out.println("Disciplina adicionada com sucesso");
 
         } catch (Exception e) {
             System.out.println("Erro ao criar disciplina");
@@ -99,7 +100,7 @@ public class PrincipalDisciplina {
         Disciplina discRemovida = Gerenciador.removerDisciplina(codigo);
 
         if (discRemovida != null) {
-            System.out.println("A disciplina " + discRemovida.getNome() + " de codigo " + codigo + "foi removida");
+            System.out.println("A disciplina " + discRemovida.getNome() + " de codigo " + codigo + " foi removida");
         } else {
             System.out.println("A disciplina de codigo " + codigo + " não foi encontrada");
         }

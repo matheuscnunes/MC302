@@ -19,7 +19,8 @@ public class Principal {
         System.out.println("3 - Monitor");
         System.out.println("4 - Conteúdo");
         System.out.println("5 - Pergunta");
-        System.out.println("6 - Sair");
+        System.out.println("6 - Disciplina");
+        System.out.println("7 - Sair");
 
         while (input.hasNextInt()) {
             int op = input.nextInt();
@@ -42,6 +43,10 @@ public class Principal {
                     case PERGUNTA:
                         System.out.println("Pergunta");
                         break;
+                    case DISCIPLINA:
+                        System.out.println("Disciplina");
+                        PrincipalDisciplina.main(input);
+                        break;
                     case SAIR:
                         System.out.println("Bye JAVAlis");
                         return;
@@ -55,7 +60,8 @@ public class Principal {
             System.out.println("3 - Monitor");
             System.out.println("4 - Conteúdo");
             System.out.println("5 - Pergunta");
-            System.out.println("6 - Sair");
+            System.out.println("6 - Disciplina");
+            System.out.println("7 - Sair");
         }
     }
 }
