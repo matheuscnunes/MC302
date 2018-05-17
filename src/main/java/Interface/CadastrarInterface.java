@@ -45,10 +45,10 @@ public class CadastrarInterface extends Interface {
         curso = obtemCurso();
         email = PrincipalAluno.obtemEmail(input);
 
-        System.out.print("Digite o nome completo: ");
+        System.out.print("Digite seu nome: ");
         nome = input.next();
 
-        System.out.print("\nDigite uma nova senha: ");
+        System.out.print("\nCrie uma senha: ");
         senha = input.next();
 
         Aluno novoAluno = new Aluno(1, ra, curso, nome, email, senha);
@@ -59,10 +59,10 @@ public class CadastrarInterface extends Interface {
         String email = "", nome, senha;
         email = PrincipalAluno.obtemEmail(input);
 
-        System.out.print("Digite o nome completo: ");
+        System.out.print("Digite o nome: ");
         nome = input.next();
 
-        System.out.print("\nDigite uma nova senha: ");
+        System.out.print("Digite uma senha: ");
         senha = input.next();
 
         Professor novoProfessor = new Professor(1, nome, email, senha);
@@ -77,10 +77,10 @@ public class CadastrarInterface extends Interface {
         curso = obtemCurso();
         email = PrincipalAluno.obtemEmail(input);
 
-        System.out.print("Digite o nome completo: ");
+        System.out.print("Digite seu nome: ");
         nome = input.next();
 
-        System.out.print("\nDigite uma nova senha: ");
+        System.out.print("\nCria uma senha: ");
         senha = input.next();
 
         Monitor novoMonitor = new Monitor(1, ra, curso, nome, email, senha);

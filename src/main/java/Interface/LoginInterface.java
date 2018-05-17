@@ -15,8 +15,7 @@ public class LoginInterface extends Interface {
     }
 
     public Usuario apresentarLogin() {
-        System.out.println("\n//////////////////////////////////////////");
-        System.out.print("\nDigite seu e-mail: ");
+        System.out.println("\n//////////////////////////////////////////\n");
         String email = PrincipalAluno.obtemEmail(input);
         System.out.print("\nDigite sua senha: ");
         String senha = input.next();

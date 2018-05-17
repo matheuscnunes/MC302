@@ -84,8 +84,12 @@ public class TelaInicialInterface extends Interface {
             case 1:
                 LoginInterface telaLogin = new LoginInterface(input, tipoUsuario);
                 Usuario userLogado = telaLogin.apresentarLogin();
-                if(userLogado == null)
+                if (userLogado == null) {
                     mostrarLoginCadastrar(tipoUsuario);
+                } else {
+                    HomeInterface home = new HomeInterface(input);
+                    home.exibirHome(tipoUsuario, userLogado);
+                }
                 break;
             case 2:
                 CadastrarInterface cadastro = new CadastrarInterface(input, tipoUsuario);

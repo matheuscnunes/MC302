@@ -26,4 +26,8 @@ public class Utils {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
     }
+
+    public static void stringPrinter(String modelo, String... strings) {
+        System.out.println(String.format(modelo, strings));
+    }
 }
