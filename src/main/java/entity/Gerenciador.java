@@ -24,7 +24,20 @@ public class Gerenciador {
 
     ////////////         Métodos de gerenciamento de Login  ///////////////////////
 
+    private static boolean verifyLoginAdmin(String email, String senha){
+        if(email.equals("admin") && senha.equals("admin")){
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean login(String email, String senha){
+        if( verifyLoginAdmin(email, senha) == true){
+            System.out.println("****** Admin logged ******");
+            return true;
+        };
+
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };

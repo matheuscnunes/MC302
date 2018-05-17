@@ -2,11 +2,13 @@ package main.java.main;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
 public class Principal {
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
         System.out.println("Hello JAVAlis!\n");
 
         Entrada[] entradas = Entrada.values();
@@ -45,5 +47,6 @@ public class Principal {
             System.out.println("4 - Sair");
         }
     }
-
 }
+
+
