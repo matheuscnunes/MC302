@@ -1,20 +1,26 @@
 package main.java.entity;
 
+import main.java.entity.content.Comentario;
+import main.java.entity.content.Conteudo;
 import main.java.entity.member.Aluno;
 import main.java.entity.member.Monitor;
 import main.java.entity.member.Professor;
 import main.java.entity.member.Usuario;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
+    private static int sequence = 1;
+
     private static List<Professor> professores = new ArrayList<Professor>();
     private static List<Aluno> alunos = new ArrayList<Aluno>();
     private static List<Monitor> monitores = new ArrayList<Monitor>();
     private static List<Disciplina> disciplinas = new ArrayList<Disciplina>();
     private static List<Turma> turmas = new ArrayList<Turma>();
+    private static List<Conteudo> conteudos = new ArrayList<Conteudo>();
     private static Usuario usuarioAtual;
 
     public Gerenciador() {
@@ -30,6 +36,10 @@ public class Gerenciador {
 
         //se não encontrar, retorna false
         return true;
+    }
+
+    public static int nextSequence(){
+        return sequence++;
     }
 
     public static Usuario deslogar(){
@@ -79,6 +89,34 @@ public class Gerenciador {
         return null;
     }
 
+    public static void adicionarComentario(int conteudoId, String textoComentario)throws Exception{
+        Conteudo conteudo = buscaConteudo(conteudoId);
+        if (conteudo != null){
+            Comentario comentario = new Comentario(
+                    Gerenciador.nextSequence(), new Date(), usuarioAtual, textoComentario);
+            conteudo.addComentario(comentario);
+        }
+        else{
+            throw new Exception("Conteúdo não existente pelo ID informado");
+        }
+    }
+
+    public static Conteudo buscaConteudo(int id){
+        List<Conteudo> conteudosEncontrados = conteudos.stream().filter(conteudo -> {
+            return conteudo.getID() == id;
+        }).collect(Collectors.toList());
+        if (!conteudosEncontrados.isEmpty()){
+            return conteudosEncontrados.get(0);
+        }
+        return null;
+    }
+
+    public static List<Conteudo>  buscaConteudos(String autor){
+        return conteudos.stream().filter(conteudo -> {
+            return conteudo.getAutor().getNome().contains(autor);
+        }).collect(Collectors.toList());
+    }
+
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor){
         if(professor == null) throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
@@ -125,6 +163,16 @@ public class Gerenciador {
         monitores.add(monitor);
     }
 
+    public static void adicionarConteudo(Conteudo conteudo) throws Exception{
+        if (conteudo == null){
+            throw new Exception("Conteúdo nulo ao adicionar conteúdo");
+        }
+        if (conteudos.contains(conteudo)){
+            throw new Exception("Conteúdo já cadastrado");
+        }
+        conteudos.add(conteudo);
+    }
+
     public static Monitor removerMonitor(int ra){
         Monitor monitorEncontrado = buscaMonitor(ra);
 
@@ -151,6 +199,20 @@ public class Gerenciador {
         }
 
         return null;
+    }
+
+    public static List<Usuario> buscarTodosUsuarios(){
+        List<Usuario> usuarios = new ArrayList<Usuario>();
+        if (professores != null){
+            usuarios.addAll(professores);
+        }
+        if (alunos != null){
+            usuarios.addAll(alunos);
+        }
+        if (monitores != null){
+            usuarios.addAll(monitores);
+        }
+        return usuarios;
     }
 
     ////////////         Métodos de gerenciamento de Disciplinas  ///////////////////////
@@ -227,6 +289,9 @@ public class Gerenciador {
         return null;
     }
 
+    public static Usuario getUsuarioLogado(){
+        return usuarioAtual;
+    }
 
     public List<Professor> getProfessores() {
         return professores;

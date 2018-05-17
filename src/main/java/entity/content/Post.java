@@ -58,4 +58,16 @@ public class Post {
     public void setDenuncias(int denuncias) {
         this.denuncias = denuncias;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if (other == null){
+            return false;
+        }
+        if (other instanceof Post){
+            Post otherPost = (Post)other;
+            return this.ID == otherPost.getID();
+        }
+        return false;
+    }
 }
