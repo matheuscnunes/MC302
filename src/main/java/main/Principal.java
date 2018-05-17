@@ -35,6 +35,7 @@ public class Principal {
                         break;
                     case CONTEUDO:
                         System.out.println("Conteúdo");
+                        PrincipalConteudo.main(input);
                         break;
                     case PERGUNTA:
                         System.out.println("Pergunta");
