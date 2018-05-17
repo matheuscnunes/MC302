@@ -76,7 +76,7 @@ public class Disciplina {
         }
     }
 
-    public void adicinarTurma(Turma turma) throws Exception {
+    public void adicionarTurma(Turma turma) throws Exception {
         if (turma == null) {
             throw new Exception("Turma não instanciada em adicionarTurma");
         }
