@@ -17,36 +17,32 @@ public class CadastrarInterface extends Interface {
         this.TIPO_USUARIO = tipoUsuario;
     }
 
-    public boolean apresentarCadastro() {
+    public void apresentarCadastro() {
         switch (TIPO_USUARIO) {
             case ALUNO:
                 Aluno aluno = cadastroAluno();
                 Gerenciador.adicionarAluno(aluno);
                 System.out.println("Aluno adicionado!");
-                return true;
+                break;
             case PROFESSOR:
                 Professor prof = cadastroProfessor();
                 Gerenciador.adicionarProfessor(prof);
                 System.out.println("Professor adicionado!");
-                return true;
+                break;
             case MONITOR:
                 Monitor monitor = cadastroMonitor();
                 Gerenciador.adicionarMonitor(monitor);
                 System.out.println("Monitor adicionado!");
-                return true;
+                break;
         }
-        return false;
     }
 
     private Aluno cadastroAluno() {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        System.out.print("Digite seu RA: ");
         ra = obtemRa();
-        System.out.print("\nDigite seu Curso: ");
         curso = obtemCurso();
-        System.out.print("\nDigite seu e-mail: ");
         email = PrincipalAluno.obtemEmail(input);
 
         System.out.print("Digite o nome completo: ");
@@ -77,11 +73,8 @@ public class CadastrarInterface extends Interface {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        System.out.print("Digite seu RA: ");
         ra = obtemRa();
-        System.out.print("\nDigite seu Curso: ");
         curso = obtemCurso();
-        System.out.print("\nDigite seu e-mail: ");
         email = PrincipalAluno.obtemEmail(input);
 
         System.out.print("Digite o nome completo: ");
@@ -101,7 +94,7 @@ public class CadastrarInterface extends Interface {
                 System.out.println("RA inválido");
             }
 
-            System.out.println("Digite o RA:");
+            System.out.print("Digite o RA: ");
             strRa = input.next();
 
         } while(strRa.trim().length() != 6 || !Utils.isNumeric(strRa));
@@ -115,7 +108,7 @@ public class CadastrarInterface extends Interface {
                 System.out.println("Curso inválido");
             }
 
-            System.out.println("Digite o número do curso:");
+            System.out.println("Digite o número do curso: ");
             strCurso = input.next();
 
         } while(!Utils.isNumeric(strCurso));
