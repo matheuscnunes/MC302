@@ -53,8 +53,9 @@ public class PrincipalConteudo {
                     break;
                 default:
                     System.out.println("Operação não cadastrada");
-                    main(input);
+                    Principal.main(null);
             }
+
         }
 
         main(input);

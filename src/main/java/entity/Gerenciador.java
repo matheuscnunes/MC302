@@ -10,6 +10,7 @@ import main.java.entity.member.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
@@ -28,43 +29,96 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Login  ///////////////////////
+    private static boolean verifyLoginAdmin(String email, String senha) {
+        if (email.equals("admin") && senha.equals("admin")) {
+            Usuario admin = new Aluno(1, 1, 1, "admin", "admin", "admin");
+            usuarioAtual = admin;
+            return true;
+        }
 
-    public static boolean login(String email, String senha){
-        //verifica nas listas se existe algum usuário com o email e senha recebidos no método
+        return false;
+    }
 
-        //se encontrar, altera o atributo usuarioAtual e retorna true
+    public static boolean login(String email, String senha) {
+        if (verifyLoginAdmin(email, senha) == true) {
+            System.out.println("****** Admin logged ******");
+            return true;
+        }
 
-        //se não encontrar, retorna false
+
+        Predicate<Usuario> predicate = usuario -> {
+            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
+        };
+
+        List<Aluno> alunosAchados = alunos.stream().filter(predicate).collect(Collectors.toList());
+        List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
+        List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
+
+        List<Usuario> usersAchados = new ArrayList<>();
+        usersAchados.addAll(alunosAchados);
+        usersAchados.addAll(profsAchados);
+        usersAchados.addAll(monitoresAchados);
+
+        if (usersAchados.size() < 1) {
+            System.out.println("Não foi encontrado usuário cadastrado com o email (" + email + ") e senha (" + senha + ")");
+            return false;
+        }
+
+        if (usersAchados.size() > 1) {
+            System.out.println("Foram encontrados vários usuários com o email (" + email + ") e senha (" + senha + ") : " + usersAchados.toString() + ". Será utilizado somente o primeiro.");
+            usuarioAtual = usersAchados.get(0);
+            return true;
+        }
+
+        usuarioAtual = usersAchados.get(0);
         return true;
     }
 
-    public static int nextSequence(){
+    public static int nextSequence() {
         return sequence++;
     }
 
-    public static Usuario deslogar(){
+    public static Usuario deslogar() {
         Usuario usuarioLogado = usuarioAtual;
         usuarioAtual = null;
         return usuarioLogado;
     }
 
+    public static Usuario getUsarioAtual() {
+        return usuarioAtual;
+    }
+
     ////////////         Métodos de gerenciamento de Alunos  ///////////////////////
-    public static void adicionarAluno(Aluno aluno){
-        if(aluno == null) throw new NullPointerException("[Adicionar Aluno] O aluno a ser adicionado não pode ser nulo");
+    public static void adicionarUsuatio(Usuario user) {
+        if (user == null)
+            throw new NullPointerException("[Adicionar Usuario] O usuario a ser adicionado não pode ser nulo");
+        if (user instanceof Aluno)
+            adicionarAluno((Aluno) user);
+        else if (user instanceof Professor)
+            adicionarProfessor((Professor) user);
+        else if (user instanceof Monitor)
+            adicionarMonitor((Monitor) user);
+        else
+            throw new Error("User deve ser uma instância de Aluno, Professor ou Monitor.");
+    }
+
+    public static void adicionarAluno(Aluno aluno) {
+        if (aluno == null)
+            throw new NullPointerException("[Adicionar Aluno] O aluno a ser adicionado não pode ser nulo");
 
         Aluno alunoEncontrado = buscaAluno(aluno.ra);
 
-        if(alunoEncontrado != null){
+        if (alunoEncontrado != null) {
             throw new Error("[Adicionar Aluno] Aluno com RA " + aluno.ra + " já existe.");
         }
 
         alunos.add(aluno);
     }
 
-    public static Aluno removerAluno(int ra){
+    public static Aluno removerAluno(int ra) {
         Aluno alunoEncontrado = buscaAluno(ra);
 
-        if(alunoEncontrado == null){
+        if (alunoEncontrado == null) {
             //Aluno não existe na base;
             return null;
         }
@@ -73,63 +127,81 @@ public class Gerenciador {
         return alunoEncontrado;
     }
 
-    public static List<Aluno> buscarTodosAlunos(){
+    public static List<Aluno> buscarTodosAlunos() {
         return alunos;
     }
 
-    public static Aluno buscaAluno(int ra){
+    public static Aluno buscaAluno(int ra) {
         List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> {
             return aluno.ra == ra;
         }).collect(Collectors.toList());
 
-        if(alunosEncontrados.size() >= 1){
+        if (alunosEncontrados.size() >= 1) {
             return alunosEncontrados.get(0);
         }
 
         return null;
     }
 
-    public static void adicionarComentario(int conteudoId, String textoComentario)throws Exception{
+
+    public static Aluno buscaAluno(String email) {
+        List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> {
+            return aluno.getEmail().equals(email);
+        }).collect(Collectors.toList());
+
+        if (alunosEncontrados.size() >= 1) {
+            return alunosEncontrados.get(0);
+        }
+
+        return null;
+    }
+
+    public static void adicionarComentario(int conteudoId, String textoComentario) throws Exception {
         Conteudo conteudo = buscaConteudo(conteudoId);
-        if (conteudo != null){
+        if (conteudo != null) {
             Comentario comentario = new Comentario(
                     Gerenciador.nextSequence(), new Date(), usuarioAtual, textoComentario);
             conteudo.addComentario(comentario);
-        }
-        else{
+        } else {
             throw new Exception("Conteúdo não existente pelo ID informado");
         }
     }
 
-    public static Conteudo buscaConteudo(int id){
+    public static Conteudo buscaConteudo(int id) {
         List<Conteudo> conteudosEncontrados = conteudos.stream().filter(conteudo -> {
             return conteudo.getID() == id;
         }).collect(Collectors.toList());
-        if (!conteudosEncontrados.isEmpty()){
+        if (!conteudosEncontrados.isEmpty()) {
             return conteudosEncontrados.get(0);
         }
         return null;
     }
 
-    public static List<Conteudo>  buscaConteudos(String autor){
+    public static List<Conteudo> buscaConteudos(String autor) {
         return conteudos.stream().filter(conteudo -> {
-            return conteudo.getAutor().getNome().contains(autor);
+            return conteudo.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
     }
 
-    ////////////         Métodos de gerenciamento de Professores  ///////////////////////
-    public static void adicionarProfessor(Professor professor){
-        if(professor == null) throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
 
-        //Validar se professor já existe na lista de professores antes de inserir
+    ////////////         Métodos de gerenciamento de Professores  ///////////////////////
+    public static void adicionarProfessor(Professor professor) {
+        if (professor == null)
+            throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
+
+        Professor professorEncontrado = buscaProfessor(professor.getEmail());
+
+        if (professorEncontrado != null) {
+            throw new Error("[Adicionar Professor] Professor com email " + professor.getEmail() + " já existe.");
+        }
 
         professores.add(professor);
     }
 
-    public static Professor removerProfessor(int id){
+    public static Professor removerProfessor(int id) {
         Professor profEncontrado = buscaProfessor(id);
 
-        if(profEncontrado == null){
+        if (profEncontrado == null) {
             //Professor não existe na base;
             return null;
         }
@@ -138,16 +210,28 @@ public class Gerenciador {
         return profEncontrado;
     }
 
-    public static List<Professor> buscarTodosProfessores(){
+    public static List<Professor> buscarTodosProfessores() {
         return professores;
     }
 
-    public static Professor buscaProfessor(int id){
+    public static Professor buscaProfessor(int id) {
         List<Professor> professoresAchados = professores.stream().filter(professor -> {
             return professor.id == id;
         }).collect(Collectors.toList());
 
-        if(professoresAchados.size() >= 1){
+        if (professoresAchados.size() >= 1) {
+            return professoresAchados.get(0);
+        }
+
+        return null;
+    }
+
+    public static Professor buscaProfessor(String email) {
+        List<Professor> professoresAchados = professores.stream().filter(professor -> {
+            return professor.getEmail().equals(email);
+        }).collect(Collectors.toList());
+
+        if (professoresAchados.size() >= 1) {
             return professoresAchados.get(0);
         }
 
@@ -155,28 +239,29 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Monitores  ///////////////////////
-    public static void adicionarMonitor(Monitor monitor){
-        if(monitor == null) throw new NullPointerException("[Adicionar Monitor] O monitor a ser adicionado não pode ser nulo");
+    public static void adicionarMonitor(Monitor monitor) {
+        if (monitor == null)
+            throw new NullPointerException("[Adicionar Monitor] O monitor a ser adicionado não pode ser nulo");
 
         //Validar se monitor já existe na lista de monitores antes de inserir
 
         monitores.add(monitor);
     }
 
-    public static void adicionarConteudo(Conteudo conteudo) throws Exception{
-        if (conteudo == null){
+    public static void adicionarConteudo(Conteudo conteudo) throws Exception {
+        if (conteudo == null) {
             throw new Exception("Conteúdo nulo ao adicionar conteúdo");
         }
-        if (conteudos.contains(conteudo)){
+        if (conteudos.contains(conteudo)) {
             throw new Exception("Conteúdo já cadastrado");
         }
         conteudos.add(conteudo);
     }
 
-    public static Monitor removerMonitor(int ra){
+    public static Monitor removerMonitor(int ra) {
         Monitor monitorEncontrado = buscaMonitor(ra);
 
-        if(monitorEncontrado == null){
+        if (monitorEncontrado == null) {
             //Monitor não existe na base;
             return null;
         }
@@ -185,49 +270,62 @@ public class Gerenciador {
         return monitorEncontrado;
     }
 
-    public static List<Monitor> buscarTodosMonitores(){
+    public static List<Monitor> buscarTodosMonitores() {
         return monitores;
     }
 
-    public static Monitor buscaMonitor(int ra){
+    public static Monitor buscaMonitor(int ra) {
         List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
             return monitor.ra == ra;
         }).collect(Collectors.toList());
 
-        if(monitorersAchados.size() >= 1){
+        if (monitorersAchados.size() >= 1) {
             return monitorersAchados.get(0);
         }
 
         return null;
     }
 
-    public static List<Usuario> buscarTodosUsuarios(){
+    public static Monitor buscaMonitor(String email) {
+        List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
+            return monitor.getEmail().equals(email);
+        }).collect(Collectors.toList());
+
+        if (monitorersAchados.size() >= 1) {
+            return monitorersAchados.get(0);
+        }
+
+        return null;
+    }
+
+    public static List<Usuario> buscarTodosUsuarios() {
         List<Usuario> usuarios = new ArrayList<Usuario>();
-        if (professores != null){
+        if (professores != null) {
             usuarios.addAll(professores);
         }
-        if (alunos != null){
+        if (alunos != null) {
             usuarios.addAll(alunos);
         }
-        if (monitores != null){
+        if (monitores != null) {
             usuarios.addAll(monitores);
         }
         return usuarios;
     }
 
     ////////////         Métodos de gerenciamento de Disciplinas  ///////////////////////
-    public static void adicionarDisciplina(Disciplina disciplina){
-        if(disciplina == null) throw new NullPointerException("[Adicionar Disciplina] A disciplina a ser adicionado não pode ser nula");
+    public static void adicionarDisciplina(Disciplina disciplina) {
+        if (disciplina == null)
+            throw new NullPointerException("[Adicionar Disciplina] A disciplina a ser adicionado não pode ser nula");
 
         //Validar se a disciplina já existe na lista de disciplinas antes de inserir
 
         disciplinas.add(disciplina);
     }
 
-    public static Disciplina removerDisciplina(String codigo){
+    public static Disciplina removerDisciplina(String codigo) {
         Disciplina disciplinaEncontrada = buscaDisciplina(codigo);
 
-        if(disciplinaEncontrada == null){
+        if (disciplinaEncontrada == null) {
             //Disciplina não existe na base;
             return null;
         }
@@ -236,16 +334,16 @@ public class Gerenciador {
         return disciplinaEncontrada;
     }
 
-    public static List<Disciplina> buscarTodasDisciplinas(){
+    public static List<Disciplina> buscarTodasDisciplinas() {
         return disciplinas;
     }
 
-    public static Disciplina buscaDisciplina(String codigo){
+    public static Disciplina buscaDisciplina(String codigo) {
         List<Disciplina> disciplinasAchadas = disciplinas.stream().filter(disciplina -> {
             return disciplina.getCodigo().equals(codigo);
         }).collect(Collectors.toList());
 
-        if(disciplinasAchadas.size() >= 1){
+        if (disciplinasAchadas.size() >= 1) {
             return disciplinasAchadas.get(0);
         }
 
@@ -253,18 +351,19 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Turmas  ///////////////////////
-    public static void adicionarTurma(Turma turma){
-        if(turma == null) throw new NullPointerException("[Adicionar Turma] A turma a ser adicionado não pode ser nula");
+    public static void adicionarTurma(Turma turma) {
+        if (turma == null)
+            throw new NullPointerException("[Adicionar Turma] A turma a ser adicionado não pode ser nula");
 
         //Validar se a turma já existe na lista de turmas antes de inserir
 
         turmas.add(turma);
     }
 
-    public static Turma removerTurma(int id){
+    public static Turma removerTurma(int id) {
         Turma turmaEncontrada = buscaTurma(id);
 
-        if(turmaEncontrada == null){
+        if (turmaEncontrada == null) {
             //Turma não existe na base;
             return null;
         }
@@ -273,23 +372,23 @@ public class Gerenciador {
         return turmaEncontrada;
     }
 
-    public static List<Turma> buscarTodasTurmas(){
+    public static List<Turma> buscarTodasTurmas() {
         return turmas;
     }
 
-    public static Turma buscaTurma(int id){
+    public static Turma buscaTurma(int id) {
         List<Turma> turmasEncontradas = turmas.stream().filter(turma -> {
             return turma.getId() == id;
         }).collect(Collectors.toList());
 
-        if(turmasEncontradas.size() >= 1){
+        if (turmasEncontradas.size() >= 1) {
             return turmasEncontradas.get(0);
         }
 
         return null;
     }
 
-    public static Usuario getUsuarioLogado(){
+    public static Usuario getUsuarioLogado() {
         return usuarioAtual;
     }
 

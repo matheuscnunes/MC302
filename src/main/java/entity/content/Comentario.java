@@ -8,21 +8,22 @@ public class Comentario extends Post {
 
     private String comentario;
 
-    private Boolean eRelevante;
+    private Boolean isRelevante;
 
     private String correcao;
+
 
     public Comentario(int id, Date data, Usuario autor, String comentario){
         super(id, data, autor);
         this.comentario = comentario;
-        this.eRelevante = true;
+        this.isRelevante = true;
         this.correcao = "";
     }
 
-    public Comentario(int id, Date data, Usuario autor, String comentario, Boolean eRelevante, String correcao) {
+    public Comentario(int id, Date data, Usuario autor, String comentario, Boolean isRelevante, String correcao) {
         super(id, data, autor);
         this.comentario = comentario;
-        this.eRelevante = eRelevante;
+        this.isRelevante = isRelevante;
         this.correcao = correcao;
     }
 
@@ -34,12 +35,12 @@ public class Comentario extends Post {
         this.comentario = comentario;
     }
 
-    public Boolean geteRelevante() {
-        return eRelevante;
+    public Boolean getIsRelevante() {
+        return isRelevante;
     }
 
-    public void seteRelevante(Boolean eRelevante) {
-        this.eRelevante = eRelevante;
+    public void setIsRelevante(Boolean isRelevante) {
+        this.isRelevante = isRelevante;
     }
 
     public String getCorrecao() {
