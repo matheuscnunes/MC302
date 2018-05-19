@@ -37,4 +37,6 @@ public class Conteudo extends Post {
     public void addComentario(Comentario comentario) {
         this.comentarios.add(comentario);
     }
+
+    public void removeComentario(Comentario comentario) {this.comentarios.remove(comentario);}
 }

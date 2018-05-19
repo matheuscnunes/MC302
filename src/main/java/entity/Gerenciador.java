@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
-    private static int sequence = 1;
+    private static int sequence = 0;
 
     private static List<Professor> professores = new ArrayList<Professor>();
     private static List<Aluno> alunos = new ArrayList<Aluno>();
@@ -75,7 +75,8 @@ public class Gerenciador {
     }
 
     public static int nextSequence() {
-        return sequence++;
+        Gerenciador.sequence++;
+        return Gerenciador.sequence;
     }
 
     public static Usuario deslogar() {
@@ -183,6 +184,61 @@ public class Gerenciador {
         }).collect(Collectors.toList());
     }
 
+    public static List<Conteudo> buscaConteudos(){
+        return conteudos;
+    }
+
+    private static class ComentarioRemocao{
+        private Comentario comentario;
+        private Conteudo conteudo;
+
+        public ComentarioRemocao(Comentario comentario, Conteudo conteudo){
+            this.comentario = comentario;
+            this.conteudo = conteudo;
+        }
+
+        public Comentario getComentario(){
+            return this.comentario;
+        }
+
+        public Conteudo getConteudo(){
+            return this.conteudo;
+        }
+    }
+
+    private static ComentarioRemocao buscarComentarioEmConteudos(int comentarioId){
+        if (conteudos != null){
+            for (Conteudo conteudo : conteudos){
+                List<Comentario> comentariosBuscados = conteudo.getComentarios().stream().filter(
+                        comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()){
+                    return new ComentarioRemocao(comentariosBuscados.get(0), conteudo);
+                }
+
+            }
+        }
+        return null;
+    }
+
+    public static Comentario removerComentarioEmConteudo(int comentarioId){
+        ComentarioRemocao comentarioRemocao = buscarComentarioEmConteudos(comentarioId);
+        if (comentarioRemocao != null) {
+            Conteudo conteudo = comentarioRemocao.getConteudo();
+            Comentario comentario = comentarioRemocao.getComentario();
+            conteudo.removeComentario(comentario);
+            return comentario;
+        }
+        return null;
+    }
+
+    public static Conteudo removerConteudo(int id){
+        Conteudo conteudo = buscaConteudo(id);
+        if (conteudo != null){
+            conteudos.remove(conteudo);
+            return conteudo;
+        }
+        return null;
+    }
 
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor) {
@@ -436,7 +492,7 @@ public class Gerenciador {
         return usuarioAtual;
     }
 
-    public void setUsuarioAtual(Usuario usuarioAtual) {
-        this.usuarioAtual = usuarioAtual;
+    public static void setUsuarioAtual(Usuario usuarioAtual) {
+        Gerenciador.usuarioAtual = usuarioAtual;
     }
 }

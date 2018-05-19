@@ -17,7 +17,7 @@ public class PrincipalConteudo {
         System.out.println("1 - NOVO CONTEÚDO");
         System.out.println("2 - BUSCAR CONTEÚDO POR ID");
         System.out.println("3 - BUSCAR CONTEÚDOS POR AUTOR");
-        System.out.println("4 - BUSCAR CONTEÚDOS POR INTERVALO DE DATA");
+        System.out.println("4 - BUSCAR TODOS OS CONTEÚDOS");
         System.out.println("5 - COMENTAR");
         System.out.println("6 - REMOVER  COMENTÁRIO");
         System.out.println("7 - REMOVER CONTEÚDO");
@@ -37,16 +37,16 @@ public class PrincipalConteudo {
                     buscarConteudosPorAutor(input);
                     break;
                 case 4:
-                    //buscarConteudosPorIntervaloData(input);
+                    buscarConteudos();
                     break;
                 case 5:
                     adicionarComentario(input);
                     break;
                 case 6:
-                    //removerComentario(input);
+                    removerComentario(input);
                     break;
                 case 7:
-                    //removerConteudo(input);
+                    removerConteudo(input);
                     break;
                 case 8:
                     Principal.main(new String[]{});
@@ -66,12 +66,13 @@ public class PrincipalConteudo {
             System.out.println("Não existe nenhum conteúdo com esse ID");
         }
         else {
+            System.out.println("ID : " + conteudoPesquisado.getID());
             System.out.println("Conteúdo : " + conteudoPesquisado.getConteudo());
             System.out.println("Autor : " + conteudoPesquisado.getAutor().getNome());
             List<Comentario> comentarios = conteudoPesquisado.getComentarios();
             if (comentarios != null){
                 for (Comentario comentario : comentarios){
-                    System.out.println("Comentário : " + comentario.getComentario());
+                    System.out.println("----- Comentário : " + comentario.getComentario());
                 }
             }
             System.out.println();
@@ -85,6 +86,7 @@ public class PrincipalConteudo {
             conteudoId = input.nextInt();
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             adicionarComentario(input);
         }
 
@@ -98,13 +100,60 @@ public class PrincipalConteudo {
         }
     }
 
+    private static void removerComentario(Scanner input){
+        int comentarioId = 0;
+        try{
+            System.out.println("Digite o id do comentário para remover : ");
+            comentarioId = input.nextInt();
+            Comentario comentarioRemovido = Gerenciador.removerComentarioEmConteudo(comentarioId);
+            if (comentarioRemovido == null){
+                System.out.println("Não existe nenhum comentário com esse ID");
+            }
+            else{
+                System.out.println("Comentário (" + comentarioRemovido.getComentario() + ") removido com sucesso !");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            removerComentario(input);
+        }
+    }
+
+    private static void removerConteudo(Scanner input){
+        int conteudoId = 0;
+        try{
+            System.out.println("Digite o id do conteúdo para remover : ");
+            conteudoId = input.nextInt();
+            Conteudo conteudoRemovido = Gerenciador.removerConteudo(conteudoId);
+            if (conteudoRemovido == null){
+                System.out.println("Não existe nenhum conteúdo com esse ID");
+            }
+            else{
+                System.out.println("Conteúdo do autor " +conteudoRemovido.getAutor().getNome() + " removido com sucesso");
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            removerConteudo(input);
+        }
+    }
+
+    private static void buscarConteudos(){
+        List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos();
+        if (conteudosBuscados != null){
+            for (Conteudo conteudo : conteudosBuscados){
+                exibirConteudo(conteudo);
+            }
+        }
+    }
+
     private static void buscarConteudosPorAutor(Scanner input){
         String autor = "";
         do{
             System.out.println("Digite o nome do autor para buscar os conteúdos : ");
             autor = input.next();
         }
-        while (autor != "");
+        while (autor.trim().equals(""));
 
         List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos(autor);
         if (conteudosBuscados == null || conteudosBuscados.isEmpty()){

@@ -40,8 +40,10 @@ public class LoginInterface extends Interface {
             System.out.println("Não foi encontrado aluno cadastrado com esse email!");
             return null;
         }
-        if(user.getSenha().equals(senha))
+        if(user.getSenha().equals(senha)) {
+            Gerenciador.setUsuarioAtual(user);
             return user;
+        }
         System.out.println("Senha incorreta! Tente novamente.");
         return null;
     }
