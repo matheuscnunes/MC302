@@ -34,7 +34,7 @@ public class Principal {
                         System.out.println("Monitor");
                         break;
                     case CONTEUDO:
-                        System.out.println("Conteúdo");
+                        PrincipalConteudo.main(input);
                         break;
                     case PERGUNTA:
                         System.out.println("Pergunta");

@@ -48,6 +48,9 @@ public class PrincipalConteudo {
                 case 7:
                     //removerConteudo(input);
                     break;
+                case 8:
+                    Principal.main(new String[]{});
+                    break;
                 default:
                     System.out.println("Operação não cadastrada");
                     main(input);
