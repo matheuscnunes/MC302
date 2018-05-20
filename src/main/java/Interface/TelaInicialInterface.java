@@ -4,6 +4,7 @@ import main.java.entity.member.Usuario;
 import main.java.main.PrincipalAluno;
 import main.java.main.PrincipalConteudo;
 import main.java.main.PrincipalDisciplina;
+import main.java.main.PrincipalPergunta;
 
 import java.util.Scanner;
 
@@ -65,6 +66,7 @@ public class TelaInicialInterface extends Interface {
                         break;
                     case PERGUNTA:
                         System.out.println("Pergunta");
+                        PrincipalPergunta.main(input);
                         break;
                     case DISCIPLINA:
                         System.out.println("Disciplina");
