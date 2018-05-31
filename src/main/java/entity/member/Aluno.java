@@ -9,13 +9,25 @@ public class Aluno extends Usuario {
     private int curso;
     private ArrayList<ControleDeFaltas> controladoresDeFaltas;
 
-    // TODO (matheuss-nunes): faz sentido tipoUsuario?
-    // , int tipoUsuario
     public Aluno(int id, int ra, int curso, String nome, String email, String senha) {
         super(id, nome, email, senha);
         this.ra = ra;
         this.curso = curso;
         controladoresDeFaltas = new ArrayList<ControleDeFaltas>();
+    }
+
+    public boolean adicionarControladorDeFaltas(ControleDeFaltas novoControlador) {
+        if(controladoresDeFaltas.contains(novoControlador))
+            return false;
+        controladoresDeFaltas.add(novoControlador);
+        return true;
+    }
+
+    public boolean removerControladorDeFaltas(ControleDeFaltas removerControlador) {
+        if(!controladoresDeFaltas.contains(removerControlador))
+            return false;
+        controladoresDeFaltas.add(removerControlador);
+        return true;
     }
 
     //getters e setters
@@ -34,20 +46,6 @@ public class Aluno extends Usuario {
         return controladoresDeFaltas;
     }
 
-    public boolean adicionarControladorDeFaltas(ControleDeFaltas novoControlador) {
-        if(controladoresDeFaltas.contains(novoControlador))
-            return false;
-        controladoresDeFaltas.add(novoControlador);
-        return true;
-    }
-
-    public boolean removerControladorDeFaltas(ControleDeFaltas removerControlador) {
-        if(!controladoresDeFaltas.contains(removerControlador))
-            return false;
-        controladoresDeFaltas.add(removerControlador);
-        return true;
-    }
-
     @Override
     public String toString() {
         return "Aluno{" +
@@ -59,7 +57,6 @@ public class Aluno extends Usuario {
                 ", email=" + getEmail() +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object obj) {

@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
-    private static int sequence = 1;
+    private static int id = 1;
 
     private static List<Professor> professores = new ArrayList<Professor>();
     private static List<Aluno> alunos = new ArrayList<Aluno>();
@@ -40,7 +40,7 @@ public class Gerenciador {
     }
 
     public static boolean login(String email, String senha) {
-        if (verifyLoginAdmin(email, senha) == true) {
+        if (verifyLoginAdmin(email, senha)) {
             System.out.println("****** Admin logged ******");
             return true;
         }
@@ -74,8 +74,8 @@ public class Gerenciador {
         return true;
     }
 
-    public static int nextSequence() {
-        return sequence++;
+    public static int proximoId() {
+        return id++;
     }
 
     public static Usuario deslogar() {
@@ -92,12 +92,12 @@ public class Gerenciador {
     public static void adicionarUsuatio(Usuario user) {
         if (user == null)
             throw new NullPointerException("[Adicionar Usuario] O usuario a ser adicionado não pode ser nulo");
-        if (user instanceof Aluno)
-            adicionarAluno((Aluno) user);
+        if (user instanceof Monitor)
+            adicionarMonitor((Monitor) user);
         else if (user instanceof Professor)
             adicionarProfessor((Professor) user);
-        else if (user instanceof Monitor)
-            adicionarMonitor((Monitor) user);
+        else if (user instanceof Aluno)
+            adicionarAluno((Aluno) user);
         else
             throw new Error("User deve ser uma instância de Aluno, Professor ou Monitor.");
     }
@@ -160,7 +160,7 @@ public class Gerenciador {
         Conteudo conteudo = buscaConteudo(conteudoId);
         if (conteudo != null) {
             Comentario comentario = new Comentario(
-                    Gerenciador.nextSequence(), new Date(), usuarioAtual, textoComentario);
+                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
             conteudo.addComentario(comentario);
         } else {
             throw new Exception("Conteúdo não existente pelo ID informado");
