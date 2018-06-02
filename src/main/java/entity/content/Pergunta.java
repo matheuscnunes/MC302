@@ -7,30 +7,32 @@ import java.util.Date;
 import java.util.List;
 
 public class Pergunta extends Post {
+    private String tituloPergunta;
+    private boolean isAnonimo;
 
-    private String pergunta;
-
-    private List<Comentario> comentarios;
-
-    public Pergunta(int id, Date date, Usuario autor, String pergunta) {
-        super(id, date, autor);
-        this.pergunta = pergunta;
-        this.comentarios = new ArrayList<>();
+    public Pergunta(int id, Date date, Usuario autor, String pergunta, String tituloPergunta, boolean isAnonimo) {
+        super(id, date, autor, pergunta);
+        this.isAnonimo = isAnonimo;
+        setTituloPergunta(tituloPergunta);
     }
 
-    public String getPergunta() {
-        return pergunta;
+    public boolean isAnonimo() {
+        return isAnonimo;
     }
 
-    public void setPergunta(String pergunta) {
-        this.pergunta = pergunta;
+    public void setAnonimo(boolean anonimo) {
+        isAnonimo = anonimo;
     }
 
-    public List<Comentario> getComentarios() {
-        return comentarios;
+    public String getTituloPergunta() {
+        return tituloPergunta;
     }
 
-    public void addComentario(Comentario comentario) {
-        this.comentarios.add(comentario);
+    public void setTituloPergunta(String tituloPergunta) {
+        if(tituloPergunta.length() > 60) {
+            System.out.println("Esse título é muito grande! Títulos devem ter menos de 60 caracteres.");
+        } else {
+            this.tituloPergunta = tituloPergunta;
+        }
     }
 }

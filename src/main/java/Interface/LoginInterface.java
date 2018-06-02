@@ -2,6 +2,7 @@ package main.java.Interface;
 
 import main.java.entity.Gerenciador;
 import main.java.entity.member.Aluno;
+import main.java.entity.member.TipoDeUsuario;
 import main.java.entity.member.Usuario;
 
 import java.util.Scanner;
@@ -12,9 +13,11 @@ public class LoginInterface extends Interface {
     public LoginInterface(Scanner input, TipoDeUsuario tipoUsuario) {
         super(input);
         this.TIPO_USUARIO = tipoUsuario;
+        Aluno fakeAluno = new Aluno(3982, 203263, 42, "Mateus Freitas", "mateus@gmail.com", "1234");
+        Gerenciador.adicionarAluno(fakeAluno);
     }
 
-    public Usuario apresentarLogin() {
+    public boolean apresentarLogin() {
         System.out.println("\n//////////////////////////////////////////\n");
         String email = PrincipalAluno.obtemEmail(input);
         System.out.print("\nDigite sua senha: ");
@@ -23,26 +26,7 @@ public class LoginInterface extends Interface {
         return validarLogin(email, senha);
     }
 
-    private Usuario validarLogin(String email, String senha) {
-        Usuario user = null;
-        switch (TIPO_USUARIO) {
-            case ALUNO:
-                user = Gerenciador.buscaAluno(email);
-                break;
-            case PROFESSOR:
-                user = Gerenciador.buscaProfessor(email);
-                break;
-            case MONITOR:
-                user = Gerenciador.buscaMonitor(email);
-                break;
-        }
-        if(user == null) {
-            System.out.println("Não foi encontrado aluno cadastrado com esse email!");
-            return null;
-        }
-        if(user.getSenha().equals(senha))
-            return user;
-        System.out.println("Senha incorreta! Tente novamente.");
-        return null;
+    private boolean validarLogin(String email, String senha) {
+        return Gerenciador.login(TIPO_USUARIO, email, senha);
     }
 }

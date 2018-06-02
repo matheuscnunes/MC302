@@ -1,11 +1,11 @@
 package main.java.entity;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
-import main.java.entity.member.Aluno;
-import main.java.entity.member.Monitor;
-import main.java.entity.member.Professor;
-import main.java.entity.member.Usuario;
+import main.java.entity.content.Pergunta;
+import main.java.entity.content.Post;
+import main.java.entity.member.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +22,7 @@ public class Gerenciador {
     private static List<Disciplina> disciplinas = new ArrayList<Disciplina>();
     private static List<Turma> turmas = new ArrayList<Turma>();
     private static List<Conteudo> conteudos = new ArrayList<Conteudo>();
+    private static List<Pergunta> perguntas = new ArrayList<Pergunta>();
     private static Usuario usuarioAtual;
 
     public Gerenciador() {
@@ -39,38 +40,73 @@ public class Gerenciador {
         return false;
     }
 
-    public static boolean login(String email, String senha) {
+    public static boolean login(TipoDeUsuario tipoUsuario, String email, String senha) {
         if (verifyLoginAdmin(email, senha) == true) {
             System.out.println("****** Admin logged ******");
             return true;
         }
+        switch (tipoUsuario) {
+            case PROFESSOR:
+                return loginProfessor(email, senha);
+            case ALUNO:
+                return loginAluno(email, senha);
+            case MONITOR:
+                return loginMonitor(email, senha);
+        }
+        return false;
+    }
 
-
+    private static boolean loginAluno(String email, String senha) {
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };
 
         List<Aluno> alunosAchados = alunos.stream().filter(predicate).collect(Collectors.toList());
-        List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
-        List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
-
-        List<Usuario> usersAchados = new ArrayList<>();
-        usersAchados.addAll(alunosAchados);
-        usersAchados.addAll(profsAchados);
-        usersAchados.addAll(monitoresAchados);
-
-        if (usersAchados.size() < 1) {
-            System.out.println("Não foi encontrado usuário cadastrado com o email (" + email + ") e senha (" + senha + ")");
+        if (alunosAchados.size() < 1) {
+            System.out.println("Não foi encontrado aluno cadastrado com o email (" + email + ") e senha (" + senha + ")");
             return false;
         }
-
-        if (usersAchados.size() > 1) {
-            System.out.println("Foram encontrados vários usuários com o email (" + email + ") e senha (" + senha + ") : " + usersAchados.toString() + ". Será utilizado somente o primeiro.");
-            usuarioAtual = usersAchados.get(0);
-            return true;
+        if (alunosAchados.size() > 1) {
+            System.out.println("Foram encontrados vários alunos com o email (" + email + ") e senha (" + senha + ") : " + alunosAchados.toString() + ". Será utilizado somente o primeiro.");
+            return false;
         }
+        usuarioAtual = alunosAchados.get(0);
+        return true;
+    }
 
-        usuarioAtual = usersAchados.get(0);
+    private static boolean loginProfessor(String email, String senha) {
+        Predicate<Usuario> predicate = usuario -> {
+            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
+        };
+
+        List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
+        if (profsAchados.size() < 1) {
+            System.out.println("Não foi encontrado professor cadastrado com o email (" + email + ") e senha (" + senha + ")");
+            return false;
+        }
+        if (profsAchados.size() > 1) {
+            System.out.println("Foram encontrados vários professores com o email (" + email + ") e senha (" + senha + ") : " + profsAchados.toString() + ". Será utilizado somente o primeiro.");
+            return false;
+        }
+        usuarioAtual = profsAchados.get(0);
+        return true;
+    }
+
+    private static boolean loginMonitor(String email, String senha) {
+        Predicate<Usuario> predicate = usuario -> {
+            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
+        };
+
+        List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
+        if (monitoresAchados.size() < 1) {
+            System.out.println("Não foi encontrado monitor cadastrado com o email (" + email + ") e senha (" + senha + ")");
+            return false;
+        }
+        if (monitoresAchados.size() > 1) {
+            System.out.println("Foram encontrados vários monitores com o email (" + email + ") e senha (" + senha + ") : " + monitoresAchados.toString() + ". Será utilizado somente o primeiro.");
+            return false;
+        }
+        usuarioAtual = monitoresAchados.get(0);
         return true;
     }
 
@@ -156,14 +192,13 @@ public class Gerenciador {
         return null;
     }
 
-    public static void adicionarComentario(int conteudoId, String textoComentario) throws Exception {
-        Conteudo conteudo = buscaConteudo(conteudoId);
-        if (conteudo != null) {
+    public static void adicionarComentario(Post postagem, String textoComentario) throws Exception {
+        if (postagem != null) {
             Comentario comentario = new Comentario(
                     Gerenciador.nextSequence(), new Date(), usuarioAtual, textoComentario);
-            conteudo.addComentario(comentario);
+            postagem.addComentario(comentario);
         } else {
-            throw new Exception("Conteúdo não existente pelo ID informado");
+            throw new Exception("Não é possível adicionar comentário sem uma postagem!");
         }
     }
 
@@ -180,6 +215,22 @@ public class Gerenciador {
     public static List<Conteudo> buscaConteudos(String autor) {
         return conteudos.stream().filter(conteudo -> {
             return conteudo.getAutor().getNome().equals(autor);
+        }).collect(Collectors.toList());
+    }
+
+    public static Pergunta buscaPergunta(int id) {
+        List<Pergunta> perguntasEncontradas = perguntas.stream().filter(pergunta -> {
+            return pergunta.getID() == id;
+        }).collect(Collectors.toList());
+        if (!perguntasEncontradas.isEmpty()) {
+            return perguntasEncontradas.get(0);
+        }
+        return null;
+    }
+
+    public static List<Pergunta> buscaPerguntas(String autor) {
+        return perguntas.stream().filter(pergunta -> {
+            return pergunta.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
     }
 
@@ -427,6 +478,10 @@ public class Gerenciador {
     public List<Turma> getTurmas() {
         return turmas;
     }
+
+    public static List<Pergunta> getPerguntas() { return perguntas; }
+
+    public static List<Conteudo> getConteudos() { return conteudos; }
 
     public void setTurmas(List<Turma> turmas) {
         this.turmas = turmas;

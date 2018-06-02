@@ -15,8 +15,8 @@ public class PrincipalGerenciador {
 
         Aluno aluno = new Aluno(1,1,1,"Gi","teste@gmail.com", "123");
         Gerenciador.adicionarAluno(aluno);
-        Gerenciador.login("teste@gmail.com", "123");
-
-        System.out.println("usuario atual: " + Gerenciador.getUsarioAtual());
+//        Gerenciador.login("teste@gmail.com", "123");
+//
+//        System.out.println("usuario atual: " + Gerenciador.getUsarioAtual());
     }
 }

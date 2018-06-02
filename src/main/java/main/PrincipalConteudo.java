@@ -63,12 +63,12 @@ public class PrincipalConteudo {
             System.out.println("Não existe nenhum conteúdo com esse ID");
         }
         else {
-            System.out.println("Conteúdo : " + conteudoPesquisado.getConteudo());
+            System.out.println("Conteúdo : " + conteudoPesquisado.getTexto());
             System.out.println("Autor : " + conteudoPesquisado.getAutor().getNome());
             List<Comentario> comentarios = conteudoPesquisado.getComentarios();
             if (comentarios != null){
                 for (Comentario comentario : comentarios){
-                    System.out.println("Comentário : " + comentario.getComentario());
+                    System.out.println("Comentário : " + comentario.getTexto());
                 }
             }
             System.out.println();
@@ -88,7 +88,7 @@ public class PrincipalConteudo {
         System.out.println("Digite o texto do comentário : ");
         try {
             String comentario = input.next();
-            Gerenciador.adicionarComentario(conteudoId, comentario);
+//            Gerenciador.adicionarComentario(conteudoId, comentario);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class PrincipalConteudo {
             while (texto.trim().equals(""));
 
             Date dataPostagem = new Date();
-            Conteudo conteudo = new Conteudo(Gerenciador.nextSequence(), dataPostagem, usuarioPostagem, texto);
+            Conteudo conteudo = new Conteudo(Gerenciador.nextSequence(), dataPostagem, usuarioPostagem, texto, "TITULO");
             try {
                 Gerenciador.adicionarConteudo(conteudo);
                 System.out.println("Conteúdo adicionado!");

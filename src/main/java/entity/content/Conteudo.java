@@ -7,34 +7,22 @@ import java.util.Date;
 import java.util.List;
 
 public class Conteudo extends Post {
+    private String tituloConteudo;
 
-    private String conteudo;
-
-    private List<Comentario> comentarios;
-
-    public String getConteudo() {
-        return conteudo;
+    public Conteudo(int ID, Date date, Usuario autor, String conteudo, String tituloConteudo) {
+        super(ID, date, autor, conteudo);
+        setTituloConteudo(tituloConteudo);
     }
 
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
+    public String getTituloConteudo() {
+        return tituloConteudo;
     }
 
-    public List<Comentario> getComentarios() {
-        return comentarios;
-    }
-
-    public Conteudo(int ID, Date date, Usuario autor, String conteudo) {
-        super(ID, date, autor);
-        this.conteudo = conteudo;
-        comentarios = new ArrayList<>();
-    }
-
-    public void setComentarios(List<Comentario> comentarios) {
-        this.comentarios = comentarios;
-    }
-
-    public void addComentario(Comentario comentario) {
-        this.comentarios.add(comentario);
+    public void setTituloConteudo(String tituloConteudo) {
+        if(tituloConteudo.length() > 60) {
+            System.out.println("Esse título é muito grande! Títulos devem ter menos de 60 caracteres.");
+        } else {
+            this.tituloConteudo = tituloConteudo;
+        }
     }
 }
