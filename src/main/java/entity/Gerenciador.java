@@ -31,6 +31,58 @@ public class Gerenciador {
         super();
     }
 
+    public static List<Turma> buscarTurmas(Disciplina disciplina) {
+        return turmas.stream().filter(
+                turma -> {return turma.getDisciplina().equals(disciplina);}
+        ).collect(Collectors.toList());
+    }
+
+    public static List<Turma> buscarTurmas(int ano){
+        return turmas.stream().filter(
+                turma -> {return turma.getAno() == ano;}
+        ).collect(Collectors.toList());
+    }
+
+    public static List<Turma> buscarTurmas(Aluno aluno){
+        return turmas.stream().filter(
+                turma -> {return turma.getAlunos().contains(aluno);}
+        ).collect(Collectors.toList());
+    }
+
+    public static List<Turma> buscarTurmas(Professor professor){
+        return turmas.stream().filter(
+                turma -> {return turma.getProfessor().equals(professor);}
+        ).collect(Collectors.toList());
+    }
+
+    public static List<Turma> buscarTurmas(Monitor monitor){
+        return turmas.stream().filter(
+                turma -> {return turma.getMonitores().contains(monitor);}
+        ).collect(Collectors.toList());
+    }
+
+    public static Turma buscarTurma(int id){
+        List<Turma> turmasBuscadas = turmas.stream().filter(
+                turma -> {return turma.getId() == id;}
+        ).collect(Collectors.toList());
+        if (turmasBuscadas == null || turmasBuscadas.isEmpty()){
+            return null;
+        }
+        return turmasBuscadas.get(0);
+    }
+
+    public static void alterarTurma(int id, int ano, Semestre semestre, Disciplina disciplina, Professor professor)
+                               throws Exception{
+        Turma turma = buscarTurma(id);
+        if (turma == null){
+            throw new Exception("Turma não existente com esse ID para alterar");
+        }
+        turma.setAno(ano);
+        turma.setSemestre(semestre);
+        turma.setDisciplina(disciplina);
+        turma.setProfessor(professor);
+    }
+
     ////////////         Métodos de gerenciamento de Login  ///////////////////////
     private static boolean verifyLoginAdmin(String email, String senha) {
         if (email.equals("admin") && senha.equals("admin")) {
