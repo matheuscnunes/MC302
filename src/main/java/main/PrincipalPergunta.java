@@ -192,7 +192,7 @@ public class PrincipalPergunta {
             while (texto.trim().equals(""));
 
             Date dataPostagem = new Date();
-            Pergunta pergunta = new Pergunta(Gerenciador.nextSequence(), dataPostagem, usuarioPostagem, texto);
+            Pergunta pergunta = new Pergunta(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto);
             try {
                 Gerenciador.adicionarPergunta(pergunta);
                 System.out.println("Pergunta adicionada!");

@@ -15,7 +15,7 @@ public class Turma {
     private List<Monitor> monitores;
     private List<Post> posts;
 
-    public Turma(int Id, int ano, Semestre semestre, Disciplina disciplina, List<Aluno>
+    public Turma(int id, int ano, Semestre semestre, Disciplina disciplina, List<Aluno>
             alunos, Professor professor, List<Monitor> monitores, List<Post> posts) {
         this.id = id;
         this.ano = ano;

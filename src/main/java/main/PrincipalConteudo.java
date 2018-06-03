@@ -193,7 +193,7 @@ public class PrincipalConteudo {
             while (texto.trim().equals(""));
 
             Date dataPostagem = new Date();
-            Conteudo conteudo = new Conteudo(Gerenciador.nextSequence(), dataPostagem, usuarioPostagem, texto);
+            Conteudo conteudo = new Conteudo(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto);
             try {
                 Gerenciador.adicionarConteudo(conteudo);
                 System.out.println("Conteúdo adicionado!");
