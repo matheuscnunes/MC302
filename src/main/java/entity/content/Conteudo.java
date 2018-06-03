@@ -24,8 +24,8 @@ public class Conteudo extends Post {
         return comentarios;
     }
 
-    public Conteudo(int ID, Date date, Usuario autor, String conteudo) {
-        super(ID, date, autor);
+    public Conteudo(int id, Date date, Usuario autor, String conteudo) {
+        super(id, date, autor);
         this.conteudo = conteudo;
         comentarios = new ArrayList<>();
     }
@@ -39,4 +39,9 @@ public class Conteudo extends Post {
     }
 
     public void removeComentario(Comentario comentario) {this.comentarios.remove(comentario);}
+
+    public Conteudo withComentario(Comentario comentario) {
+        addComentario(comentario);
+        return this;
+    }
 }

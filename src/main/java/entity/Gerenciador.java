@@ -42,10 +42,6 @@ public class Gerenciador {
         return false;
     }
 
-    public static void verifyList() {
-        System.out.println("Data verified");
-    }
-
     public static boolean login(String email, String senha) {
         if (verifyLoginAdmin(email, senha)) {
             System.out.println("****** Admin logged ******");

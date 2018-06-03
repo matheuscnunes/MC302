@@ -35,4 +35,9 @@ public class Pergunta extends Post {
     }
 
     public void removeComentario(Comentario comentario) { this.comentarios.remove(comentario);}
+
+    public Pergunta withComentario(Comentario comentario) {
+        addComentario(comentario);
+        return this;
+    }
 }
