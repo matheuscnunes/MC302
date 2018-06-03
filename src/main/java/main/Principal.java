@@ -3,10 +3,6 @@ package main.java.main;
 import main.java.Interface.TelaInicialInterface;
 import main.java.entity.Gerenciador;
 import main.java.utils.GeradorDados;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
 public class Principal {

@@ -2,6 +2,8 @@ package main.java.entity;
 
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
+import main.java.entity.content.Pergunta;
+import main.java.entity.content.Post;
 import main.java.entity.member.Aluno;
 import main.java.entity.member.Monitor;
 import main.java.entity.member.Professor;
@@ -14,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
-    private static int id = 1;
+    private static int id = 0;
 
     private static List<Professor> professores = new ArrayList<Professor>();
     private static List<Aluno> alunos = new ArrayList<Aluno>();
@@ -22,6 +24,7 @@ public class Gerenciador {
     private static List<Disciplina> disciplinas = new ArrayList<Disciplina>();
     private static List<Turma> turmas = new ArrayList<Turma>();
     private static List<Conteudo> conteudos = new ArrayList<Conteudo>();
+    private static List<Pergunta> perguntas = new ArrayList<Pergunta>();
     private static Usuario usuarioAtual;
 
     public Gerenciador() {
@@ -79,7 +82,8 @@ public class Gerenciador {
     }
 
     public static int proximoId() {
-        return id++;
+        Gerenciador.id++;
+        return id;
     }
 
     public static Usuario deslogar() {
@@ -160,7 +164,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static void adicionarComentario(int conteudoId, String textoComentario) throws Exception {
+    public static void adicionarComentarioEmConteudo(int conteudoId, String textoComentario) throws Exception {
         Conteudo conteudo = buscaConteudo(conteudoId);
         if (conteudo != null) {
             Comentario comentario = new Comentario(
@@ -169,6 +173,27 @@ public class Gerenciador {
         } else {
             throw new Exception("Conteúdo não existente pelo ID informado");
         }
+    }
+
+    public static void adicionarComentarioEmPergunta(int perguntaId, String textoComentario) throws Exception {
+        Pergunta pergunta = buscaPergunta(perguntaId);
+        if (pergunta != null) {
+            Comentario comentario = new Comentario(
+                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
+            pergunta.addComentario(comentario);
+        } else {
+            throw new Exception("Pergunta não existente pelo ID informado");
+        }
+    }
+
+    public static Pergunta buscaPergunta(int id) {
+        List<Pergunta> perguntasEncontradas = perguntas.stream().filter(pergunta -> {
+            return pergunta.getID() == id;
+        }).collect(Collectors.toList());
+        if (!perguntasEncontradas.isEmpty()) {
+            return perguntasEncontradas.get(0);
+        }
+        return null;
     }
 
     public static Conteudo buscaConteudo(int id) {
@@ -187,6 +212,105 @@ public class Gerenciador {
         }).collect(Collectors.toList());
     }
 
+    public static List<Pergunta> buscarPerguntas(String autor) {
+        return perguntas.stream().filter(pergunta -> {
+            return pergunta.getAutor().getNome().equals(autor);
+        }).collect(Collectors.toList());
+    }
+
+    public static List<Conteudo> buscaConteudos(){
+        return conteudos;
+    }
+
+    public static List<Pergunta> buscarPerguntas(){
+        return perguntas;
+    }
+
+    private static class ComentarioRemocao{
+        private Comentario comentario;
+        private Post post;
+
+        public ComentarioRemocao(Comentario comentario, Post post){
+            this.comentario = comentario;
+            this.post = post;
+        }
+
+        public Comentario getComentario(){
+            return this.comentario;
+        }
+
+        public Post getPost(){
+            return this.post;
+        }
+    }
+
+    private static ComentarioRemocao buscarComentarioEmConteudos(int comentarioId){
+        if (conteudos != null){
+            for (Conteudo conteudo : conteudos){
+                List<Comentario> comentariosBuscados = conteudo.getComentarios().stream().filter(
+                        comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()){
+                    return new ComentarioRemocao(comentariosBuscados.get(0), conteudo);
+                }
+
+            }
+        }
+        return null;
+    }
+
+    private static ComentarioRemocao buscarComentarioEmPerguntas(int comentarioId){
+        if (perguntas != null){
+            for (Pergunta pergunta : perguntas){
+                List<Comentario> comentariosBuscados = pergunta.getComentarios().stream().filter(
+                        comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()){
+                    return new ComentarioRemocao(comentariosBuscados.get(0), pergunta);
+                }
+
+            }
+        }
+        return null;
+    }
+
+    public static Comentario removerComentarioEmConteudo(int comentarioId){
+        ComentarioRemocao comentarioRemocao = buscarComentarioEmConteudos(comentarioId);
+        if (comentarioRemocao != null) {
+            Conteudo conteudo = (Conteudo)comentarioRemocao.getPost();
+            Comentario comentario = comentarioRemocao.getComentario();
+            conteudo.removeComentario(comentario);
+            return comentario;
+        }
+        return null;
+    }
+
+    public static Comentario removerComentarioEmPergunta(int comentarioId){
+        ComentarioRemocao comentarioRemocao = buscarComentarioEmPerguntas(comentarioId);
+        if (comentarioRemocao != null) {
+            Pergunta pergunta = (Pergunta)comentarioRemocao.getPost();
+            Comentario comentario = comentarioRemocao.getComentario();
+            pergunta.removeComentario(comentario);
+            return comentario;
+        }
+        return null;
+    }
+
+    public static Conteudo removerConteudo(int id){
+        Conteudo conteudo = buscaConteudo(id);
+        if (conteudo != null){
+            conteudos.remove(conteudo);
+            return conteudo;
+        }
+        return null;
+    }
+
+    public static Pergunta removerPergunta(int id){
+        Pergunta pergunta = buscaPergunta(id);
+        if (pergunta != null){
+            perguntas.remove(pergunta);
+            return pergunta;
+        }
+        return null;
+    }
 
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor) {
@@ -260,6 +384,16 @@ public class Gerenciador {
             throw new Exception("Conteúdo já cadastrado");
         }
         conteudos.add(conteudo);
+    }
+
+    public static void adicionarPergunta(Pergunta pergunta) throws Exception {
+        if (pergunta == null) {
+            throw new Exception("Pergunta nula ao adicionar pergunta");
+        }
+        if (perguntas.contains(pergunta)) {
+            throw new Exception("Pergunta já cadastrada");
+        }
+        perguntas.add(pergunta);
     }
 
     public static Monitor removerMonitor(int ra) {
@@ -440,7 +574,7 @@ public class Gerenciador {
         return usuarioAtual;
     }
 
-    public void setUsuarioAtual(Usuario usuarioAtual) {
-        this.usuarioAtual = usuarioAtual;
+    public static void setUsuarioAtual(Usuario usuarioAtual) {
+        Gerenciador.usuarioAtual = usuarioAtual;
     }
 }
