@@ -2,7 +2,7 @@ package main.java.Interface;
 
 import java.util.Scanner;
 
-public class Interface {
+public abstract class Interface {
     protected final String ANSI_RESET = "\u001B[0m";
     protected final String ANSI_BLACK = "\u001B[30m";
     protected final String ANSI_RED = "\u001B[31m";

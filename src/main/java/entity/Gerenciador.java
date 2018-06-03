@@ -218,6 +218,12 @@ public class Gerenciador {
         }).collect(Collectors.toList());
     }
 
+    public static List<Post> filtrarPorAutor(ArrayList<Post> postagens, String autor) {
+        return postagens.stream().filter(post -> {
+            return post.getAutor().getNome().equals(autor);
+        }).collect(Collectors.toList());
+    }
+
     public static Pergunta buscaPergunta(int id) {
         List<Pergunta> perguntasEncontradas = perguntas.stream().filter(pergunta -> {
             return pergunta.getID() == id;

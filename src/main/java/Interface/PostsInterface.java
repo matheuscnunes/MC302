@@ -14,11 +14,13 @@ import java.util.Scanner;
 
 public class PostsInterface extends Interface {
     private int indiceUltimoPostExibido = 0;
-    private List<Post> postagens;
+    private ArrayList<Post> postagens;
+    private ArrayList<Post> postagensFiltradas;
 
     public PostsInterface(Scanner input) {
         super(input);
         this.postagens = new ArrayList<>();
+        this.postagensFiltradas = null;
         postagens.addAll(Gerenciador.getConteudos());
         postagens.addAll(Gerenciador.getPerguntas());
         Conteudo conteudoFake = new Conteudo(Gerenciador.nextSequence(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
@@ -28,10 +30,17 @@ public class PostsInterface extends Interface {
         //TODO: ORDENAR POSTAGENS POR DATA!!
     }
 
+    private ArrayList<Post> getPostagens() {
+        if(postagensFiltradas == null)
+            return postagens;
+        else
+            return postagensFiltradas;
+    }
+
     public void exibirPost() {
         System.out.println("////////////////////////////////////////////////////////////\n");
 
-        Post postParaExibir = postagens.get(indiceUltimoPostExibido);
+        Post postParaExibir = getPostagens().get(indiceUltimoPostExibido);
         if(postParaExibir instanceof Conteudo) {
             exibirConteudo((Conteudo)postParaExibir);
             mostrarBotaoAnteriorProximo();
@@ -57,10 +66,10 @@ public class PostsInterface extends Interface {
     }
 
     private void mostrarBotaoAnteriorProximo() {
-        if(indiceUltimoPostExibido == 0 && postagens.size() == 1) {
+        if(indiceUltimoPostExibido == 0 && getPostagens().size() == 1) {
             return;
         }
-        if(indiceUltimoPostExibido > 0 && indiceUltimoPostExibido + 1 < postagens.size()) {
+        if(indiceUltimoPostExibido > 0 && indiceUltimoPostExibido + 1 < getPostagens().size()) {
             printlnAzul(" =================    ================");
             printlnAzul("|| (1) ANTERIOR  ||  || (2) PRÓXIMO  ||");
             printlnAzul(" =================    ================");
@@ -114,17 +123,17 @@ public class PostsInterface extends Interface {
                 System.out.println("Opção ainda não funciona!");
                 break;
             case 4:
-                System.out.println("Opção ainda não funciona!");
+                filtrarPostagens();
                 break;
             case 5:
-                if(postagens.get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
+                if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
                     System.out.println("Opção ainda não funciona!");
                 } else {
                     voltar();
                 }
                 break;
             case 6:
-                if(postagens.get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
+                if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
                     voltar();
                 } else {
                     System.out.println("Comando não disponível!");
@@ -133,6 +142,13 @@ public class PostsInterface extends Interface {
                 System.out.println("Comando não disponível!");
                 capturarOpcaoEscolhida();
         }
+    }
+
+    private void filtrarPostagens() {
+        FiltrarPostsInterface filtrarPostagensInterface = new FiltrarPostsInterface(input, getPostagens());
+        postagensFiltradas = filtrarPostagensInterface.filtrarPosts();
+        indiceUltimoPostExibido = 0;
+        exibirPost();
     }
 
     private void postAnterior() {
@@ -146,7 +162,7 @@ public class PostsInterface extends Interface {
     }
 
     private void proximoPost() {
-        if(indiceUltimoPostExibido + 1 < postagens.size()) {
+        if(indiceUltimoPostExibido + 1 < getPostagens().size()) {
             indiceUltimoPostExibido++;
             exibirPost();
         } else {
