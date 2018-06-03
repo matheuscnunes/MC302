@@ -46,6 +46,10 @@ public class Aluno extends Usuario {
         return controladoresDeFaltas;
     }
 
+    public int getRa() {
+        return ra;
+    }
+
     @Override
     public String toString() {
         return "Aluno{" +

@@ -8,7 +8,6 @@ import main.java.entity.member.Aluno;
 import main.java.entity.member.Monitor;
 import main.java.entity.member.Professor;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class GeradorDados {
@@ -18,6 +17,7 @@ public class GeradorDados {
         geraMonitores();
         geraProfessores();
         geraDisciplina();
+        geraTurmas();
     }
 
     private static void geraAlunos() {
@@ -36,7 +36,7 @@ public class GeradorDados {
 
     private static void geraMonitores() {
         Monitor zejao = new Monitor(Gerenciador.proximoId(), 999666, 42, "Zejão", "ze@gmail.com", "pastel e itubaina");
-        Monitor pontinho = new Monitor(Gerenciador.proximoId(), 999666, 42, "Pontinho", "pontinho@gmail.com", ".");
+        Monitor pontinho = new Monitor(Gerenciador.proximoId(), 110022, 42, "Pontinho", "pontinho@gmail.com", ".");
 
         Gerenciador.adicionarMonitor(zejao);
         Gerenciador.adicionarMonitor(pontinho);
@@ -68,9 +68,19 @@ public class GeradorDados {
 
     private static void geraTurmas() {
         Turma quintaSerie = new Turma(Gerenciador.proximoId(), 2018, Semestre.PRIMEIRO,
-                Gerenciador.buscarTodasDisciplinas().get(0), Gerenciador.buscarTodosAlunos().stream().filter(
+                Gerenciador.buscaDisciplina("MA237"), Gerenciador.buscarTodosAlunos().stream().filter(
                 a -> a.getId() % 2 == 0).collect(Collectors.toList()), Gerenciador.buscaProfessor("linda@imecc.br"),
-                Gerenciador.buscarTodosMonitores(), null);
+                Gerenciador.buscarTodosMonitores().stream().filter(monitor -> monitor.getRa() == 110022)
+                        .collect(Collectors.toList()), null);
+
+        Turma oitavaSerie = new Turma(Gerenciador.proximoId(), 2018, Semestre.SEGUNDO,
+                Gerenciador.buscaDisciplina("MC358"), Gerenciador.buscarTodosAlunos().stream().filter(
+                a -> a.getId() % 2 == 1).collect(Collectors.toList()), Gerenciador.buscaProfessor("358@ic.br"),
+                Gerenciador.buscarTodosMonitores().stream().filter(monitor -> monitor.getRa() == 999666).
+                        collect(Collectors.toList()), null);
+
+        Gerenciador.adicionarTurma(quintaSerie);
+        Gerenciador.adicionarTurma(oitavaSerie);
     }
 
 }
