@@ -484,7 +484,7 @@ public class Gerenciador {
         return null;
     }
 
-    ////////////         Métodos de gerenciamento de Turmas  ///////////////////////
+    ////////////         Métodos de gerenciamento de Turmas  /////////f//////////////
     public static void adicionarTurma(Turma turma) {
         if (turma == null)
             throw new NullPointerException("[Adicionar Turma] A turma a ser adicionado não pode ser nula");
@@ -506,6 +506,121 @@ public class Gerenciador {
         return turmaEncontrada;
     }
 
+    public static void adicionarAlunoEmTurma(Turma turma, Aluno aluno) {
+        try {
+            turma.adicionarAluno(aluno);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean removerAlunoEmTurma(Turma turma, List<Aluno> alunos) {
+        try {
+            return turma.removerAluno(alunos);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean removerAlunoEmTurma(Turma turma, Aluno aluno) {
+        try {
+            return turma.removerAluno(aluno);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Aluno removerAlunoEmTurma(Turma turma, int id) {
+        try {
+            return turma.removerAluno(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //TODO: integração com parte de posts do Gerenciador
+
+    public void adicionarPostEmTurma(Turma turma, Post post) {
+        try {
+            turma.adicionarPost(post);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        if (post instanceof Conteudo) {
+            adicionarConteudo( (Conteudo) post );
+        } else {
+            adicionarConteudo( (Pergunta) post );
+        }
+    }
+
+    public boolean removerPostEmTurma(Turma turma, List<Post> posts) {
+        try {
+            if (posts instanceof Conteudo) {
+                removerConteudo(posts.getID());
+            }
+            return turma.removerPost(posts);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removerPostEmTurma(Turma turma, Post post) {
+        try {
+            return turma.removerPost();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Post removerPostEmTurma(Turma turma, int id) {
+        try {
+            return turma.removerPost(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void adicionarMonitorEmTurma(Turma turma, Monitor monitor) {
+        try {
+            turma.adicionarMonitor(monitor);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean removerMonitorEmTurma(Turma turma, List<Monitor> monitores) {
+        try {
+            return turma.removerMonitor(monitores);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removerMonitorEmTurma(Turma turma, Monitor monitor) {
+        try {
+            return turma.removerMonitor(monitor);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Monitor removerMonitorEmTurma(Turma turma, int id) {
+        try {
+            return turma.removerMonitor(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static List<Turma> buscarTodasTurmas() {
         return turmas;
     }
@@ -520,10 +635,6 @@ public class Gerenciador {
         }
 
         return null;
-    }
-
-    public static Usuario getUsuarioLogado() {
-        return usuarioAtual;
     }
 
     public List<Professor> getProfessores() {
@@ -566,7 +677,7 @@ public class Gerenciador {
         this.turmas = turmas;
     }
 
-    public Usuario getUsuarioAtual() {
+    public static Usuario getUsuarioLogado() {
         return usuarioAtual;
     }
 
