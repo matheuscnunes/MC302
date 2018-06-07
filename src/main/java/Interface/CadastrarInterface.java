@@ -1,10 +1,7 @@
 package main.java.Interface;
 
 import main.java.entity.Gerenciador;
-import main.java.entity.member.Aluno;
-import main.java.entity.member.Monitor;
-import main.java.entity.member.Professor;
-import main.java.entity.member.Usuario;
+import main.java.entity.member.*;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -105,10 +102,10 @@ public class CadastrarInterface extends Interface {
         String strCurso = "";
         do {
             if (!strCurso.trim().equals("")) {
-                System.out.println("Curso inválido");
+                System.out.print("Curso inválido");
             }
 
-            System.out.println("Digite o número do curso: ");
+            System.out.print("Digite o número do curso: ");
             strCurso = input.next();
 
         } while(!Utils.isNumeric(strCurso));

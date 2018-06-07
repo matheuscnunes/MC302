@@ -66,12 +66,12 @@ public class PrincipalPergunta {
         }
         else {
             System.out.println("ID : " + perguntaPesquisada.getID());
-            System.out.println("Pergunta : " + perguntaPesquisada.getPergunta());
+            System.out.println("Pergunta : " + perguntaPesquisada.getTexto());
             System.out.println("Autor : " + perguntaPesquisada.getAutor().getNome());
             List<Comentario> comentarios = perguntaPesquisada.getComentarios();
             if (comentarios != null){
                 for (Comentario comentario : comentarios){
-                    System.out.println("----- Comentário : " + comentario.getComentario());
+                    System.out.println("----- Comentário : " + comentario.getTexto());
                 }
             }
             System.out.println();
@@ -109,7 +109,7 @@ public class PrincipalPergunta {
                 System.out.println("Não existe nenhum comentário com esse ID");
             }
             else{
-                System.out.println("Comentário (" + comentarioRemovido.getComentario() + ") removido com sucesso !");
+                System.out.println("Comentário (" + comentarioRemovido.getTexto() + ") removido com sucesso !");
             }
         }
         catch (Exception e) {
@@ -184,6 +184,12 @@ public class PrincipalPergunta {
             System.out.println("Você precisa fazer o login antes de realizar essa operação");
         }
         else {
+            String titulo = "";
+            do {
+                System.out.println("Digite o título da pergunta (até 60 caracteres):");
+                titulo = input.next();
+            }
+            while (titulo.length() > 60);
             String texto = "";
             do {
                 System.out.println("Digite o texto da pergunta completo:");
@@ -191,8 +197,9 @@ public class PrincipalPergunta {
             }
             while (texto.trim().equals(""));
 
+
             Date dataPostagem = new Date();
-            Pergunta pergunta = new Pergunta(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto);
+            Pergunta pergunta = new Pergunta(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto, titulo, false);
             try {
                 Gerenciador.adicionarPergunta(pergunta);
                 System.out.println("Pergunta adicionada!");
