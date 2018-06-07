@@ -23,8 +23,8 @@ public class PostsInterface extends Interface {
         this.postagensFiltradas = null;
         postagens.addAll(Gerenciador.getConteudos());
         postagens.addAll(Gerenciador.getPerguntas());
-        Conteudo conteudoFake = new Conteudo(Gerenciador.nextSequence(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
-        Pergunta perguntaFake = new Pergunta(Gerenciador.nextSequence(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
+        Conteudo conteudoFake = new Conteudo(Gerenciador.proximoId(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
+        Pergunta perguntaFake = new Pergunta(Gerenciador.proximoId(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
         postagens.add(conteudoFake);
         postagens.add(perguntaFake);
         //TODO: ORDENAR POSTAGENS POR DATA!!

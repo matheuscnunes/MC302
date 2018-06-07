@@ -35,4 +35,9 @@ public class Pergunta extends Post {
             this.tituloPergunta = tituloPergunta;
         }
     }
+
+    public Pergunta withComentario(Comentario comentario) {
+        addComentario(comentario);
+        return this;
+    }
 }

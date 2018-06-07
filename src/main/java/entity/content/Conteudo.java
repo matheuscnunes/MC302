@@ -25,4 +25,9 @@ public class Conteudo extends Post {
             this.tituloConteudo = tituloConteudo;
         }
     }
+
+    public Conteudo withComentario(Comentario comentario) {
+        addComentario(comentario);
+        return this;
+    }
 }

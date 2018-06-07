@@ -13,8 +13,6 @@ public class LoginInterface extends Interface {
     public LoginInterface(Scanner input, TipoDeUsuario tipoUsuario) {
         super(input);
         this.TIPO_USUARIO = tipoUsuario;
-        Aluno fakeAluno = new Aluno(3982, 203263, 42, "Mateus Freitas", "mateus@gmail.com", "1234");
-        Gerenciador.adicionarAluno(fakeAluno);
     }
 
     public boolean apresentarLogin() {

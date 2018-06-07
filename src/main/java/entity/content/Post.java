@@ -78,6 +78,8 @@ public class Post {
         this.comentarios.add(comentario);
     }
 
+    public void removeComentario(Comentario comentario) { this.comentarios.remove(comentario);}
+
     @Override
     public boolean equals(Object other){
         if (other == null){

@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Gerenciador {
-    private static int sequence = 1;
+    private static int id = 0;
 
     private static List<Professor> professores = new ArrayList<Professor>();
     private static List<Aluno> alunos = new ArrayList<Aluno>();
@@ -39,9 +39,8 @@ public class Gerenciador {
 
         return false;
     }
-
     public static boolean login(TipoDeUsuario tipoUsuario, String email, String senha) {
-        if (verifyLoginAdmin(email, senha) == true) {
+        if (verifyLoginAdmin(email, senha)) {
             System.out.println("****** Admin logged ******");
             return true;
         }
@@ -110,8 +109,9 @@ public class Gerenciador {
         return true;
     }
 
-    public static int nextSequence() {
-        return sequence++;
+    public static int proximoId() {
+        Gerenciador.id++;
+        return id;
     }
 
     public static Usuario deslogar() {
@@ -128,12 +128,12 @@ public class Gerenciador {
     public static void adicionarUsuatio(Usuario user) {
         if (user == null)
             throw new NullPointerException("[Adicionar Usuario] O usuario a ser adicionado não pode ser nulo");
-        if (user instanceof Aluno)
-            adicionarAluno((Aluno) user);
+        if (user instanceof Monitor)
+            adicionarMonitor((Monitor) user);
         else if (user instanceof Professor)
             adicionarProfessor((Professor) user);
-        else if (user instanceof Monitor)
-            adicionarMonitor((Monitor) user);
+        else if (user instanceof Aluno)
+            adicionarAluno((Aluno) user);
         else
             throw new Error("User deve ser uma instância de Aluno, Professor ou Monitor.");
     }
@@ -195,11 +195,31 @@ public class Gerenciador {
     public static void adicionarComentario(Post postagem, String textoComentario) throws Exception {
         if (postagem != null) {
             Comentario comentario = new Comentario(
-                    Gerenciador.nextSequence(), new Date(), usuarioAtual, textoComentario);
+                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
             postagem.addComentario(comentario);
         } else {
             throw new Exception("Não é possível adicionar comentário sem uma postagem!");
         }
+    }
+
+    public static void adicionarComentarioEmConteudo(int conteudoId, String textoComentario) throws Exception {
+        Conteudo conteudo = buscaConteudo(conteudoId);
+        adicionarComentario(conteudo, textoComentario);
+    }
+
+    public static void adicionarComentarioEmPergunta(int perguntaId, String textoComentario) throws Exception {
+        Pergunta pergunta = buscaPergunta(perguntaId);
+        adicionarComentario(pergunta, textoComentario);
+    }
+
+    public static Pergunta buscaPergunta(int id) {
+        List<Pergunta> perguntasEncontradas = perguntas.stream().filter(pergunta -> {
+            return pergunta.getID() == id;
+        }).collect(Collectors.toList());
+        if (!perguntasEncontradas.isEmpty()) {
+            return perguntasEncontradas.get(0);
+        }
+        return null;
     }
 
     public static Conteudo buscaConteudo(int id) {
@@ -224,22 +244,105 @@ public class Gerenciador {
         }).collect(Collectors.toList());
     }
 
-    public static Pergunta buscaPergunta(int id) {
-        List<Pergunta> perguntasEncontradas = perguntas.stream().filter(pergunta -> {
-            return pergunta.getID() == id;
-        }).collect(Collectors.toList());
-        if (!perguntasEncontradas.isEmpty()) {
-            return perguntasEncontradas.get(0);
-        }
-        return null;
-    }
 
-    public static List<Pergunta> buscaPerguntas(String autor) {
+
+    public static List<Pergunta> buscarPerguntas(String autor) {
         return perguntas.stream().filter(pergunta -> {
             return pergunta.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
     }
 
+    public static List<Conteudo> buscaConteudos(){
+        return conteudos;
+    }
+
+    public static List<Pergunta> buscarPerguntas(){
+        return perguntas;
+    }
+
+    private static class ComentarioRemocao{
+        private Comentario comentario;
+        private Post post;
+
+        public ComentarioRemocao(Comentario comentario, Post post){
+            this.comentario = comentario;
+            this.post = post;
+        }
+
+        public Comentario getComentario(){
+            return this.comentario;
+        }
+
+        public Post getPost(){
+            return this.post;
+        }
+    }
+
+    private static ComentarioRemocao buscarComentarioEmConteudos(int comentarioId){
+        if (conteudos != null){
+            for (Conteudo conteudo : conteudos){
+                List<Comentario> comentariosBuscados = conteudo.getComentarios().stream().filter(
+                        comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()){
+                    return new ComentarioRemocao(comentariosBuscados.get(0), conteudo);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static ComentarioRemocao buscarComentarioEmPerguntas(int comentarioId){
+        if (perguntas != null){
+            for (Pergunta pergunta : perguntas){
+                List<Comentario> comentariosBuscados = pergunta.getComentarios().stream().filter(
+                        comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()) {
+                    return new ComentarioRemocao(comentariosBuscados.get(0), pergunta);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Comentario removerComentarioEmConteudo(int comentarioId){
+        ComentarioRemocao comentarioRemocao = buscarComentarioEmConteudos(comentarioId);
+        if (comentarioRemocao != null) {
+            Conteudo conteudo = (Conteudo)comentarioRemocao.getPost();
+            Comentario comentario = comentarioRemocao.getComentario();
+            conteudo.removeComentario(comentario);
+            return comentario;
+        }
+        return null;
+    }
+
+    public static Comentario removerComentarioEmPergunta(int comentarioId){
+        ComentarioRemocao comentarioRemocao = buscarComentarioEmPerguntas(comentarioId);
+        if (comentarioRemocao != null) {
+            Pergunta pergunta = (Pergunta)comentarioRemocao.getPost();
+            Comentario comentario = comentarioRemocao.getComentario();
+            pergunta.removeComentario(comentario);
+            return comentario;
+        }
+        return null;
+    }
+
+    public static Conteudo removerConteudo(int id){
+        Conteudo conteudo = buscaConteudo(id);
+        if (conteudo != null){
+            conteudos.remove(conteudo);
+            return conteudo;
+        }
+        return null;
+    }
+
+    public static Pergunta removerPergunta(int id){
+        Pergunta pergunta = buscaPergunta(id);
+        if (pergunta != null){
+            perguntas.remove(pergunta);
+            return pergunta;
+        }
+        return null;
+    }
 
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor) {
@@ -313,6 +416,16 @@ public class Gerenciador {
             throw new Exception("Conteúdo já cadastrado");
         }
         conteudos.add(conteudo);
+    }
+
+    public static void adicionarPergunta(Pergunta pergunta) throws Exception {
+        if (pergunta == null) {
+            throw new Exception("Pergunta nula ao adicionar pergunta");
+        }
+        if (perguntas.contains(pergunta)) {
+            throw new Exception("Pergunta já cadastrada");
+        }
+        perguntas.add(pergunta);
     }
 
     public static Monitor removerMonitor(int ra) {
@@ -497,7 +610,7 @@ public class Gerenciador {
         return usuarioAtual;
     }
 
-    public void setUsuarioAtual(Usuario usuarioAtual) {
-        this.usuarioAtual = usuarioAtual;
+    public static void setUsuarioAtual(Usuario usuarioAtual) {
+        Gerenciador.usuarioAtual = usuarioAtual;
     }
 }
