@@ -344,6 +344,20 @@ public class Gerenciador {
         return null;
     }
 
+    public static Post removerPostagem(Post p) {
+        if(p instanceof Conteudo)
+            return removerConteudo(p.getID());
+        if(p instanceof Pergunta)
+            return removerPergunta(p.getID());
+        if(p instanceof Comentario) {
+            Comentario removido = removerComentarioEmConteudo(p.getID());
+            if(removido == null)
+                return removerComentarioEmPergunta(p.getID());
+            return removido;
+        }
+        return null;
+    }
+
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
     public static void adicionarProfessor(Professor professor) {
         if (professor == null)

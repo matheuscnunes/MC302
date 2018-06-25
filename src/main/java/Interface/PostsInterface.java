@@ -121,22 +121,36 @@ public class PostsInterface extends Interface {
                 break;
             case 3:
                 System.out.println("Opção ainda não funciona!");
+                capturarOpcaoEscolhida();
                 break;
             case 4:
                 filtrarPostagens();
                 break;
             case 5:
+                //DELETAR só aparece para o criador da postagem. Logo, esse if verifica qual opção de vdd a pessoa quer
                 if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
-                    System.out.println("Opção ainda não funciona!");
+                    Post postagemRemovida = Gerenciador.removerPostagem(getPostagens().get(indiceUltimoPostExibido));
+                    if(postagemRemovida != null) {
+                        postagens.remove(postagemRemovida);
+                        if(postagensFiltradas != null)
+                            postagensFiltradas.remove(postagemRemovida);
+                        System.out.println("Postagem removida com sucesso!");
+                        proximoPost();
+                    } else {
+                        System.err.println("Não foi possível remover essa postagem :/");
+                        capturarOpcaoEscolhida();
+                    }
                 } else {
                     voltar();
                 }
                 break;
             case 6:
+                //VOLTAR pode ser a opção de número 6 ou 5. Só é 6 quando existe a opçao DELETAR
                 if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
                     voltar();
                 } else {
                     System.out.println("Comando não disponível!");
+                    capturarOpcaoEscolhida();
                 }
             default:
                 System.out.println("Comando não disponível!");
