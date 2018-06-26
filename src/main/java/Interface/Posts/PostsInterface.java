@@ -1,5 +1,6 @@
 package main.java.Interface.Posts;
 
+import main.java.Interface.Comentarios.ComentarioInterface;
 import main.java.Interface.HomeInterface;
 import main.java.Interface.Interface;
 import main.java.entity.Gerenciador;
@@ -113,7 +114,8 @@ public class PostsInterface extends Interface {
                 proximoPost();
                 break;
             case 3:
-                System.out.println("Opção ainda não funciona!");
+                ComentarioInterface comentarioInterface = new ComentarioInterface(input,getPostagens().get(indiceUltimoPostExibido), this);
+                comentarioInterface.mostrarComentarios();
                 capturarOpcaoEscolhida();
                 break;
             case 4:
