@@ -1,6 +1,8 @@
-package main.java.Interface;
+package main.java.Interface.Posts;
 
+import main.java.Interface.Interface;
 import main.java.entity.Gerenciador;
+import main.java.entity.Turma;
 import main.java.entity.content.Pergunta;
 import main.java.entity.content.Post;
 
@@ -46,7 +48,7 @@ public class FiltrarPostsInterface extends Interface {
                     return new ArrayList<Post>(postagensFiltradasPorAutor);
                 }
             case 2:
-                break;
+                return new ArrayList<Post>(filtrarPorTurma());
             case 3:
                 return new ArrayList<Post>(Gerenciador.getPerguntas());
             case 4:
@@ -55,12 +57,31 @@ public class FiltrarPostsInterface extends Interface {
                 return null; //return null faz com que não haja filtro na tela de posts
             default: return null;
         }
-        return null;
     }
 
     private List<Post> filtrarPorAutor() {
         System.out.print("Digite o nome do autor: ");
         String autor = input.next();
         return Gerenciador.filtrarPorAutor(postagens, autor);
+    }
+
+    private List<Post> filtrarPorTurma() {
+        List<Turma> turmas = Gerenciador.buscarTodasTurmas();
+        if(turmas.size() == 0) {
+            System.err.println("Não há turmas cadastradas no sistema! Nào é possível filtrar por turma.");
+            return null;
+        }
+        System.out.println("-----------------------------------------");
+        System.out.println("  TURMAS");
+        System.out.println("-----------------------------------------");
+        for(int i = 0; i < turmas.size(); i++) {
+            System.out.println((i + 1) + " - " + turmas.get(i).getDisciplina().getNome() + "(" + turmas.get(i).getSemestre().toString() + "/" + turmas.get(i).getAno() + ")");
+        }
+        int op = 0;
+        while(op < 1 || op > turmas.size()) {
+            System.out.print("\nDigite o número da opção desejada: ");
+            op = input.nextInt();
+        }
+        return turmas.get(op - 1).getPosts();
     }
 }
