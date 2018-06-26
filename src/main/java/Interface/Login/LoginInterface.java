@@ -1,5 +1,6 @@
-package main.java.Interface;
+package main.java.Interface.Login;
 
+import main.java.Interface.Interface;
 import main.java.entity.Gerenciador;
 import main.java.entity.member.Aluno;
 import main.java.entity.member.TipoDeUsuario;
@@ -17,7 +18,7 @@ public class LoginInterface extends Interface {
 
     public boolean apresentarLogin() {
         System.out.println("\n//////////////////////////////////////////\n");
-        String email = PrincipalAluno.obtemEmail(input);
+        String email = LoginHelper.obtemEmail(input);
         System.out.print("\nDigite sua senha: ");
         String senha = input.next();
 

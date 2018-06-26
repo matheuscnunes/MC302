@@ -1,8 +1,7 @@
 package main.java.Interface;
 
+import main.java.Interface.Posts.PostsInterface;
 import main.java.entity.Gerenciador;
-import main.java.entity.member.TipoDeUsuario;
-import main.java.entity.member.Usuario;
 import main.java.utils.Utils;
 
 import java.util.Scanner;

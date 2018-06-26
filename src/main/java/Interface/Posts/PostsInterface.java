@@ -1,15 +1,13 @@
-package main.java.Interface;
+package main.java.Interface.Posts;
 
+import main.java.Interface.HomeInterface;
+import main.java.Interface.Interface;
 import main.java.entity.Gerenciador;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
 import main.java.entity.content.Post;
-import main.java.entity.member.Usuario;
-import main.java.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class PostsInterface extends Interface {
@@ -23,11 +21,6 @@ public class PostsInterface extends Interface {
         this.postagensFiltradas = null;
         postagens.addAll(Gerenciador.getConteudos());
         postagens.addAll(Gerenciador.getPerguntas());
-        Conteudo conteudoFake = new Conteudo(Gerenciador.proximoId(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
-        Pergunta perguntaFake = new Pergunta(Gerenciador.proximoId(), new Date(), Gerenciador.getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
-        postagens.add(conteudoFake);
-        postagens.add(perguntaFake);
-        //TODO: ORDENAR POSTAGENS POR DATA!!
     }
 
     private ArrayList<Post> getPostagens() {
@@ -129,17 +122,7 @@ public class PostsInterface extends Interface {
             case 5:
                 //DELETAR só aparece para o criador da postagem. Logo, esse if verifica qual opção de vdd a pessoa quer
                 if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(Gerenciador.getUsuarioLogado())) {
-                    Post postagemRemovida = Gerenciador.removerPostagem(getPostagens().get(indiceUltimoPostExibido));
-                    if(postagemRemovida != null) {
-                        postagens.remove(postagemRemovida);
-                        if(postagensFiltradas != null)
-                            postagensFiltradas.remove(postagemRemovida);
-                        System.out.println("Postagem removida com sucesso!");
-                        proximoPost();
-                    } else {
-                        System.err.println("Não foi possível remover essa postagem :/");
-                        capturarOpcaoEscolhida();
-                    }
+                    removerPostagemAtual();
                 } else {
                     voltar();
                 }
@@ -155,6 +138,20 @@ public class PostsInterface extends Interface {
             default:
                 System.out.println("Comando não disponível!");
                 capturarOpcaoEscolhida();
+        }
+    }
+
+    private void removerPostagemAtual() {
+        Post postagemRemovida = Gerenciador.removerPostagem(getPostagens().get(indiceUltimoPostExibido));
+        if(postagemRemovida != null) {
+            postagens.remove(postagemRemovida);
+            if(postagensFiltradas != null)
+                postagensFiltradas.remove(postagemRemovida);
+            System.out.println("Postagem removida com sucesso!");
+            proximoPost();
+        } else {
+            System.err.println("Não foi possível remover essa postagem :/");
+            capturarOpcaoEscolhida();
         }
     }
 
