@@ -1,6 +1,6 @@
 package main.java.entity;
 
-public enum Semestre {
+public enum     Semestre {
     PRIMEIRO, SEGUNDO;
 
     public int getNumero() {

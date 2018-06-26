@@ -1,7 +1,5 @@
 package main.java.entity.member;
 
-import java.util.ArrayList;
-
 public class Aluno extends Usuario {
     public final int ra;
     private int curso;
@@ -18,7 +16,7 @@ public class Aluno extends Usuario {
     }
 
     public void setCurso(int curso) {
-        if(curso > 0)
+        if (curso > 0)
             this.curso = curso;
         else
             System.out.println("Valor inválido de curso!");
@@ -41,8 +39,8 @@ public class Aluno extends Usuario {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Aluno) {
-            Aluno objAluno = (Aluno)obj;
+        if (obj instanceof Aluno) {
+            Aluno objAluno = (Aluno) obj;
             return objAluno.id == id || objAluno.ra == ra;
         }
         return false;
