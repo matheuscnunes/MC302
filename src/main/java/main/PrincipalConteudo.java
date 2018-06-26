@@ -67,12 +67,12 @@ public class PrincipalConteudo {
         }
         else {
             System.out.println("ID : " + conteudoPesquisado.getID());
-            System.out.println("Conteúdo : " + conteudoPesquisado.getConteudo());
+            System.out.println("Conteúdo : " + conteudoPesquisado.getTexto());
             System.out.println("Autor : " + conteudoPesquisado.getAutor().getNome());
             List<Comentario> comentarios = conteudoPesquisado.getComentarios();
             if (comentarios != null){
                 for (Comentario comentario : comentarios){
-                    System.out.println("----- Comentário : " + comentario.getComentario());
+                    System.out.println("Comentário : " + comentario.getTexto());
                 }
             }
             System.out.println();
@@ -110,7 +110,7 @@ public class PrincipalConteudo {
                 System.out.println("Não existe nenhum comentário com esse ID");
             }
             else{
-                System.out.println("Comentário (" + comentarioRemovido.getComentario() + ") removido com sucesso !");
+                System.out.println("Comentário (" + comentarioRemovido.getTexto() + ") removido com sucesso !");
             }
         }
         catch (Exception e) {
@@ -185,6 +185,12 @@ public class PrincipalConteudo {
             System.out.println("Você precisa fazer o login antes de realizar essa operação");
         }
         else {
+            String titulo = "";
+            do {
+                System.out.println("Digite o título da pergunta (até 60 caracteres):");
+                titulo = input.next();
+            }
+            while (titulo.length() > 60);
             String texto = "";
             do {
                 System.out.println("Digite o texto do conteúdo completo:");
@@ -193,7 +199,7 @@ public class PrincipalConteudo {
             while (texto.trim().equals(""));
 
             Date dataPostagem = new Date();
-            Conteudo conteudo = new Conteudo(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto);
+            Conteudo conteudo = new Conteudo(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto, titulo);
             try {
                 Gerenciador.adicionarConteudo(conteudo);
                 System.out.println("Conteúdo adicionado!");

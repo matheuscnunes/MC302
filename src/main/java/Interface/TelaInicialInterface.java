@@ -1,19 +1,13 @@
 package main.java.Interface;
 
-import main.java.entity.member.Usuario;
-import main.java.main.PrincipalAluno;
-import main.java.main.PrincipalConteudo;
-import main.java.main.PrincipalDisciplina;
-import main.java.main.PrincipalPergunta;
+import main.java.Interface.Login.CadastrarInterface;
+import main.java.Interface.Login.LoginInterface;
+import main.java.entity.member.*;
 
 import java.util.Scanner;
 
 enum OpcoesBoasVindas {
-    ALUNO, MONITOR, PROFESSOR, CONTEUDO, PERGUNTA, DISCIPLINA, SAIR;
-}
-
-enum TipoDeUsuario {
-    ALUNO, MONITOR, PROFESSOR;
+    ALUNO, MONITOR, PROFESSOR, SAIR;
 }
 
 public class TelaInicialInterface extends Interface {
@@ -41,7 +35,7 @@ public class TelaInicialInterface extends Interface {
 
     public void boasVindas() {
         System.out.println("Seja bem-vindo ao DA A RESPOSTA AÍ! Aqui os alunos e monitores de matérias da Unicamp se ajudam \ncom respostas de exercícios e conteúdos!");
-        System.out.println("Para utilizar, você precisa realizar login como aluno, professor ou monitor. \nDigite o número da opção desejada:\n");
+        System.out.println("Para utilizar, você precisa se cadastrar ou realizar login como aluno, professor ou monitor. \nDigite o número da opção desejada:\n");
 
         OpcoesBoasVindas[] entradas = OpcoesBoasVindas.values();
         mostrarOpcoesBoasVindas();
@@ -60,18 +54,6 @@ public class TelaInicialInterface extends Interface {
                     case MONITOR:
                         mostrarLoginCadastrar(TipoDeUsuario.MONITOR);
                         break;
-                    case CONTEUDO:
-                        System.out.println("Conteúdo");
-                        PrincipalConteudo.main(input);
-                        break;
-                    case PERGUNTA:
-                        System.out.println("Pergunta");
-                        PrincipalPergunta.main(input);
-                        break;
-                    case DISCIPLINA:
-                        System.out.println("Disciplina");
-                        PrincipalDisciplina.main(input);
-                        break;
                     case SAIR:
                         System.out.println("Bye JAVAlis");
                         return;
@@ -88,10 +70,7 @@ public class TelaInicialInterface extends Interface {
         System.out.println("1 - Aluno");
         System.out.println("2 - Monitor");
         System.out.println("3 - Professor");
-        System.out.println("4 - Conteúdo");
-        System.out.println("5 - Pergunta");
-        System.out.println("6 - Disciplina");
-        System.out.println("7 - Sair");
+        System.out.println("4 - Sair");
     }
 
     private void mostrarLoginCadastrar(TipoDeUsuario tipoUsuario) {
@@ -103,12 +82,12 @@ public class TelaInicialInterface extends Interface {
         switch(op) {
             case 1:
                 LoginInterface telaLogin = new LoginInterface(input, tipoUsuario);
-                Usuario userLogado = telaLogin.apresentarLogin();
-                if (userLogado == null) {
-                    mostrarLoginCadastrar(tipoUsuario);
-                } else {
+                boolean loginComSucesso = telaLogin.apresentarLogin();
+                if (loginComSucesso) {
                     HomeInterface home = new HomeInterface(input);
-                    home.exibirHome(tipoUsuario, userLogado);
+                    home.exibirHome();
+                } else {
+                    mostrarLoginCadastrar(tipoUsuario);
                 }
                 break;
             case 2:

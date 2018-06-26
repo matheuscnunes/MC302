@@ -5,34 +5,20 @@ import main.java.entity.member.Usuario;
 import java.util.Date;
 
 public class Comentario extends Post {
-
-    private String comentario;
-
     private Boolean isRelevante;
-
     private String correcao;
 
 
     public Comentario(int id, Date data, Usuario autor, String comentario){
-        super(id, data, autor);
-        this.comentario = comentario;
+        super(id, data, autor, comentario);
         this.isRelevante = true;
         this.correcao = "";
     }
 
     public Comentario(int id, Date data, Usuario autor, String comentario, Boolean isRelevante, String correcao) {
-        super(id, data, autor);
-        this.comentario = comentario;
+        super(id, data, autor, comentario);
         this.isRelevante = isRelevante;
         this.correcao = correcao;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
     }
 
     public Boolean getIsRelevante() {

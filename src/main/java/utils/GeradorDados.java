@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GeradorDados {
+public abstract class GeradorDados {
 
     public static void gerarDados() {
         geraAlunos();
@@ -106,15 +106,17 @@ public class GeradorDados {
         Gerenciador.adicionarTurma(oitavaSerie);
     }
 
-    static final String[] PERGUNTAS = {"Pergunta 1", "Pergunta 2", "Pergunta 3", "Pergunta 4", "Pergunta 5", "Pergunta 6"};
+    private static final String[] TITULOS_PERGUNTAS = {"Título Pergunta 1", "Título Pergunta 2", "Título Pergunta 3", "Título Pergunta 4", "Título Pergunta 5", "Título Pergunta 6"};
+    private static final String[] PERGUNTAS = {"Pergunta 1", "Pergunta 2", "Pergunta 3", "Pergunta 4", "Pergunta 5", "Pergunta 6"};
 
     private static Pergunta geraPergunta() {
         String textoPergunta = PERGUNTAS[Utils.randomInt(0, 5)];
+        String tituloPergunta = TITULOS_PERGUNTAS[Utils.randomInt(0, 5)];
         LocalDate data = LocalDate.of(Utils.randomInt(2016, 2018), Utils.randomInt(1, 12), Utils.randomInt(1, 28));
         int id = Gerenciador.proximoId();
         Aluno aluno = Gerenciador.buscarTodosAlunos().get(Utils.randomInt(0, Gerenciador.buscarTodosAlunos().size() - 1));
 
-        Pergunta pergunta = new Pergunta(id, Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()), aluno, textoPergunta);
+        Pergunta pergunta = new Pergunta(id, Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()), aluno, textoPergunta, tituloPergunta, false);
         try {
             Gerenciador.adicionarPergunta(pergunta);
         } catch (Exception e) {
@@ -123,15 +125,17 @@ public class GeradorDados {
         return pergunta;
     }
 
-    static final String[] CONTEUDOS = {"Conteudo 1", "Conteudo 2", "Conteudo 3", "Conteudo 4", "Conteudo 5", "Pergunta 6"};
+    private static final String[] TITULOS_CONTEUDOS = {"Título Conteudo 1", "Título Conteudo 2", "Título Conteudo 3", "Título Conteudo 4", "Título Conteudo 5", "Título Pergunta 6"};
+    private static final String[] CONTEUDOS = {"Conteudo 1", "Conteudo 2", "Conteudo 3", "Conteudo 4", "Conteudo 5", "Pergunta 6"};
 
     private static Conteudo geraConteudo() {
-        String pergunta = CONTEUDOS[Utils.randomInt(0, 5)];
+        String textoConteudo = CONTEUDOS[Utils.randomInt(0, 5)];
+        String tituloConteudo = TITULOS_CONTEUDOS[Utils.randomInt(0, 5)];
         LocalDate data = LocalDate.of(Utils.randomInt(2016, 2018), Utils.randomInt(1, 12), Utils.randomInt(1, 28));
         int id = Gerenciador.proximoId();
         Professor professor = Gerenciador.buscarTodosProfessores().get(Utils.randomInt(0, Gerenciador.buscarTodosProfessores().size() - 1));
 
-        Conteudo conteudo = new Conteudo(id, Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()), professor, pergunta);
+        Conteudo conteudo = new Conteudo(id, Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()), professor, textoConteudo, tituloConteudo);
         try {
             Gerenciador.adicionarConteudo(conteudo);
         } catch (Exception e) {
