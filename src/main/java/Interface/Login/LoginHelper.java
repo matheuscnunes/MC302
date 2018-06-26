@@ -6,7 +6,6 @@ import main.java.utils.Utils;
 
 import java.util.Scanner;
 
-//TODO: Find a better name for this class!!
 public class LoginHelper {
     public static String obtemEmail(Scanner input) {
         String email = "";
