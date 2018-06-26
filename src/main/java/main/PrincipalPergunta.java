@@ -3,24 +3,23 @@ package main.java.main;
 import main.java.entity.Gerenciador;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
-import main.java.entity.member.Aluno;
+import main.java.entity.content.Pergunta;
 import main.java.entity.member.Usuario;
-import main.java.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class PrincipalConteudo {
+public class PrincipalPergunta {
 
     public static void main(Scanner input) {
-        System.out.println("1 - NOVO CONTEÚDO");
-        System.out.println("2 - BUSCAR CONTEÚDO POR ID");
-        System.out.println("3 - BUSCAR CONTEÚDOS POR AUTOR");
-        System.out.println("4 - BUSCAR TODOS OS CONTEÚDOS");
+        System.out.println("1 - NOVA PERGUNTA");
+        System.out.println("2 - BUSCAR PERGUNTA POR ID");
+        System.out.println("3 - BUSCAR PERGUNTAS POR AUTOR");
+        System.out.println("4 - BUSCAR TODAS AS PERGUNTAS");
         System.out.println("5 - COMENTAR");
         System.out.println("6 - REMOVER  COMENTÁRIO");
-        System.out.println("7 - REMOVER CONTEÚDO");
+        System.out.println("7 - REMOVER PERGUNTA");
         System.out.println("8 - SAIR");
 
         if (input.hasNextInt()) {
@@ -28,16 +27,16 @@ public class PrincipalConteudo {
 
             switch (op) {
                 case 1:
-                    addConteudo(input);
+                    addPergunta(input);
                     break;
                 case 2:
-                    buscarConteudoPorId(input);
+                    buscarPerguntaPorId(input);
                     break;
                 case 3:
-                    buscarConteudosPorAutor(input);
+                    buscarPerguntasPorAutor(input);
                     break;
                 case 4:
-                    buscarConteudos();
+                    buscarPerguntas();
                     break;
                 case 5:
                     adicionarComentario(input);
@@ -46,7 +45,7 @@ public class PrincipalConteudo {
                     removerComentario(input);
                     break;
                 case 7:
-                    removerConteudo(input);
+                    removerPergunta(input);
                     break;
                 case 8:
                     Principal.main(new String[]{});
@@ -61,18 +60,18 @@ public class PrincipalConteudo {
         main(input);
     }
 
-    private static void exibirConteudo(Conteudo conteudoPesquisado){
-        if (conteudoPesquisado == null){
-            System.out.println("Não existe nenhum conteúdo com esse ID");
+    private static void exibirPergunta(Pergunta perguntaPesquisada){
+        if (perguntaPesquisada == null){
+            System.out.println("Não existe nenhuma pergunta com esse ID");
         }
         else {
-            System.out.println("ID : " + conteudoPesquisado.getID());
-            System.out.println("Conteúdo : " + conteudoPesquisado.getTexto());
-            System.out.println("Autor : " + conteudoPesquisado.getAutor().getNome());
-            List<Comentario> comentarios = conteudoPesquisado.getComentarios();
+            System.out.println("ID : " + perguntaPesquisada.getID());
+            System.out.println("Pergunta : " + perguntaPesquisada.getTexto());
+            System.out.println("Autor : " + perguntaPesquisada.getAutor().getNome());
+            List<Comentario> comentarios = perguntaPesquisada.getComentarios();
             if (comentarios != null){
                 for (Comentario comentario : comentarios){
-                    System.out.println("Comentário : " + comentario.getTexto());
+                    System.out.println("----- Comentário : " + comentario.getTexto());
                 }
             }
             System.out.println();
@@ -80,10 +79,10 @@ public class PrincipalConteudo {
     }
 
     private static void adicionarComentario(Scanner input){
-        int conteudoId = 0;
+        int perguntaId = 0;
         try{
-            System.out.println("Digite o id do conteúdo para adicinar comentários :  ");
-            conteudoId = input.nextInt();
+            System.out.println("Digite o id da pergunta para adicinar comentários :  ");
+            perguntaId = input.nextInt();
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -93,7 +92,7 @@ public class PrincipalConteudo {
         System.out.println("Digite o texto do comentário : ");
         try {
             String comentario = input.next();
-            Gerenciador.adicionarComentarioEmConteudo(conteudoId, comentario);
+            Gerenciador.adicionarComentarioEmPergunta(perguntaId, comentario);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -105,7 +104,7 @@ public class PrincipalConteudo {
         try{
             System.out.println("Digite o id do comentário para remover : ");
             comentarioId = input.nextInt();
-            Comentario comentarioRemovido = Gerenciador.removerComentarioEmConteudo(comentarioId);
+            Comentario comentarioRemovido = Gerenciador.removerComentarioEmPergunta(comentarioId);
             if (comentarioRemovido == null){
                 System.out.println("Não existe nenhum comentário com esse ID");
             }
@@ -119,67 +118,67 @@ public class PrincipalConteudo {
         }
     }
 
-    private static void removerConteudo(Scanner input){
-        int conteudoId = 0;
+    private static void removerPergunta(Scanner input){
+        int perguntaId = 0;
         try{
-            System.out.println("Digite o id do conteúdo para remover : ");
-            conteudoId = input.nextInt();
-            Conteudo conteudoRemovido = Gerenciador.removerConteudo(conteudoId);
-            if (conteudoRemovido == null){
-                System.out.println("Não existe nenhum conteúdo com esse ID");
+            System.out.println("Digite o id da pergunta para remover : ");
+            perguntaId = input.nextInt();
+            Pergunta perguntaRemovida = Gerenciador.removerPergunta(perguntaId);
+            if (perguntaRemovida == null){
+                System.out.println("Não existe nenhuma pergunta com esse ID");
             }
             else{
-                System.out.println("Conteúdo do autor " +conteudoRemovido.getAutor().getNome() + " removido com sucesso");
+                System.out.println("Pergunta do autor " +perguntaRemovida.getAutor().getNome() + " removida com sucesso");
             }
         }
         catch (Exception e){
             System.out.println(e.getMessage());
-            removerConteudo(input);
+            removerPergunta(input);
         }
     }
 
-    private static void buscarConteudos(){
-        List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos();
-        if (conteudosBuscados != null){
-            for (Conteudo conteudo : conteudosBuscados){
-                exibirConteudo(conteudo);
+    private static void buscarPerguntas(){
+        List<Pergunta> perguntasBuscadas = Gerenciador.buscarPerguntas();
+        if (perguntasBuscadas != null){
+            for (Pergunta pergunta : perguntasBuscadas){
+                exibirPergunta(pergunta);
             }
         }
     }
 
-    private static void buscarConteudosPorAutor(Scanner input){
+    private static void buscarPerguntasPorAutor(Scanner input){
         String autor = "";
         do{
-            System.out.println("Digite o nome do autor para buscar os conteúdos : ");
+            System.out.println("Digite o nome do autor para buscar as perguntas : ");
             autor = input.next();
         }
         while (autor.trim().equals(""));
 
-        List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos(autor);
-        if (conteudosBuscados == null || conteudosBuscados.isEmpty()){
-            System.out.println("Não existe nenhum conteúdo publicado por esse autor");
+        List<Pergunta> perguntasBuscadas = Gerenciador.buscarPerguntas(autor);
+        if (perguntasBuscadas == null || perguntasBuscadas.isEmpty()){
+            System.out.println("Não existe nenhuma pergunta publicada por esse autor");
         }
         else{
-            for (Conteudo conteudo : conteudosBuscados){
-                exibirConteudo(conteudo);
+            for (Pergunta pergunta : perguntasBuscadas){
+                exibirPergunta(pergunta);
             }
         }
     }
 
-    private static void buscarConteudoPorId(Scanner input){
-        int conteudoId = 0;
+    private static void buscarPerguntaPorId(Scanner input){
+        int perguntaId = 0;
         try {
-            System.out.println("Digite o ID do conteúdo a ser pesquisado: ");
-            conteudoId = input.nextInt();
+            System.out.println("Digite o ID da pergunta a ser pesquisada: ");
+            perguntaId = input.nextInt();
         }
         catch (Exception e) {
-            buscarConteudoPorId(input);
+            buscarPerguntaPorId(input);
         }
-        Conteudo conteudoPesquisado = Gerenciador.buscaConteudo(conteudoId);
-        exibirConteudo(conteudoPesquisado);
+        Pergunta perguntaPesquisada = Gerenciador.buscaPergunta(perguntaId);
+        exibirPergunta(perguntaPesquisada);
     }
 
-    private static void addConteudo(Scanner input) {
+    private static void addPergunta(Scanner input) {
         Usuario usuarioPostagem = Gerenciador.getUsuarioLogado();
         if (usuarioPostagem == null) {
             System.out.println("Você precisa fazer o login antes de realizar essa operação");
@@ -193,16 +192,17 @@ public class PrincipalConteudo {
             while (titulo.length() > 60);
             String texto = "";
             do {
-                System.out.println("Digite o texto do conteúdo completo:");
+                System.out.println("Digite o texto da pergunta completo:");
                 texto = input.next();
             }
             while (texto.trim().equals(""));
 
+
             Date dataPostagem = new Date();
-            Conteudo conteudo = new Conteudo(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto, titulo);
+            Pergunta pergunta = new Pergunta(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto, titulo, false);
             try {
-                Gerenciador.adicionarConteudo(conteudo);
-                System.out.println("Conteúdo adicionado!");
+                Gerenciador.adicionarPergunta(pergunta);
+                System.out.println("Pergunta adicionada!");
             }
             catch (Exception e){
                 e.printStackTrace();

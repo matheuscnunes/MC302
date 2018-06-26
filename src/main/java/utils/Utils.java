@@ -1,5 +1,6 @@
 package main.java.utils;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,5 +30,10 @@ public class Utils {
 
     public static void stringPrinter(String modelo, String... strings) {
         System.out.println(String.format(modelo, strings));
+    }
+
+    public static int randomInt(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max + 1 - min) + min;
     }
 }

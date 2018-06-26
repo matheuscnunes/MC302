@@ -1,10 +1,8 @@
-package main.java.Interface;
+package main.java.Interface.Login;
 
+import main.java.Interface.Interface;
 import main.java.entity.Gerenciador;
-import main.java.entity.member.Aluno;
-import main.java.entity.member.Monitor;
-import main.java.entity.member.Professor;
-import main.java.entity.member.Usuario;
+import main.java.entity.member.*;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -41,9 +39,9 @@ public class CadastrarInterface extends Interface {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        ra = obtemRa();
+        ra = LoginHelper.obtemRa(input);
         curso = obtemCurso();
-        email = PrincipalAluno.obtemEmail(input);
+        email = LoginHelper.obtemEmail(input);
 
         System.out.print("Digite seu nome: ");
         nome = input.next();
@@ -57,7 +55,7 @@ public class CadastrarInterface extends Interface {
 
     private Professor cadastroProfessor() {
         String email = "", nome, senha;
-        email = PrincipalAluno.obtemEmail(input);
+        email = LoginHelper.obtemEmail(input);
 
         System.out.print("Digite o nome: ");
         nome = input.next();
@@ -73,9 +71,9 @@ public class CadastrarInterface extends Interface {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        ra = obtemRa();
+        ra = LoginHelper.obtemRa(input);
         curso = obtemCurso();
-        email = PrincipalAluno.obtemEmail(input);
+        email = LoginHelper.obtemEmail(input);
 
         System.out.print("Digite seu nome: ");
         nome = input.next();
@@ -87,28 +85,14 @@ public class CadastrarInterface extends Interface {
         return novoMonitor;
     }
 
-    private int obtemRa() {
-        String strRa = "";
-        do {
-            if (!strRa.trim().equals("")) {
-                System.out.println("RA inválido");
-            }
-
-            System.out.print("Digite o RA: ");
-            strRa = input.next();
-
-        } while(strRa.trim().length() != 6 || !Utils.isNumeric(strRa));
-        return Integer.parseInt(strRa);
-    }
-
     private int obtemCurso() {
         String strCurso = "";
         do {
             if (!strCurso.trim().equals("")) {
-                System.out.println("Curso inválido");
+                System.out.print("Curso inválido");
             }
 
-            System.out.println("Digite o número do curso: ");
+            System.out.print("Digite o número do curso: ");
             strCurso = input.next();
 
         } while(!Utils.isNumeric(strCurso));
