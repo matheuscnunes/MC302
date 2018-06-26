@@ -114,4 +114,11 @@ public class Turma {
         }
         this.posts = posts;
     }
+
+    public void addPost(Post post) throws Exception {
+        if (post == null) {
+            throw new Exception("Lista de Post não fornecida para a turma em setPosts");
+        }
+        this.posts.add(post);
+    }
 }
