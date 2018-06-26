@@ -20,7 +20,12 @@ public class PrincipalAluno {
 
             switch (op) {
                 case 1:
-                    addAluno(input);
+                    try {
+                        addAluno(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 2:
                     buscarAluno(input);
@@ -40,7 +45,7 @@ public class PrincipalAluno {
         main(input);
     }
 
-    private static void addAluno(Scanner input) {
+    private static void addAluno(Scanner input) throws Exception{
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 

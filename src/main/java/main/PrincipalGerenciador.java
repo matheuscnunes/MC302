@@ -6,11 +6,15 @@ import main.java.entity.member.Aluno;
 public class PrincipalGerenciador {
 
     public static void main(String[] args){
-        testaLogin();
-
+        try {
+            testaLogin();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
-    public static void testaLogin(){
+    public static void testaLogin() throws Exception{
         System.out.println("Testando Login...");
 
         Aluno aluno = new Aluno(1,1,1,"Gi","teste@gmail.com", "123");

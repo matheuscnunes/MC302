@@ -1,5 +1,6 @@
 package main.java.main;
 
+import com.sun.org.apache.xml.internal.resolver.readers.ExtendedXMLCatalogReader;
 import main.java.entity.Gerenciador;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
@@ -34,7 +35,12 @@ public class PrincipalConteudo {
                     buscarConteudoPorId(input);
                     break;
                 case 3:
-                    buscarConteudosPorAutor(input);
+                    try {
+                        buscarConteudosPorAutor(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     buscarConteudos();
@@ -147,7 +153,7 @@ public class PrincipalConteudo {
         }
     }
 
-    private static void buscarConteudosPorAutor(Scanner input){
+    private static void buscarConteudosPorAutor(Scanner input) throws Exception{
         String autor = "";
         do{
             System.out.println("Digite o nome do autor para buscar os conteúdos : ");

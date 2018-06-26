@@ -22,10 +22,20 @@ public class PrincipalDisciplina {
                     addDisciplina(input);
                     break;
                 case 2:
-                    buscarDisciplina(input);
+                    try {
+                        buscarDisciplina(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 3:
-                    removeDisciplina(input);
+                    try {
+                        removeDisciplina(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     break;
@@ -76,7 +86,7 @@ public class PrincipalDisciplina {
         return Integer.parseInt(strId);
     }
 
-    private static void buscarDisciplina(Scanner input) {
+    private static void buscarDisciplina(Scanner input) throws Exception{
         String codigo;
 
         System.out.println("Digite o código da disciplina:");
@@ -91,7 +101,7 @@ public class PrincipalDisciplina {
         }
     }
 
-    private static void removeDisciplina(Scanner input) {
+    private static void removeDisciplina(Scanner input) throws Exception{
         String codigo;
 
         System.out.println("Digite o código da disciplina:");

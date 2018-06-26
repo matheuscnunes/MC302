@@ -1,8 +1,11 @@
 package main.java.Interface;
 
-import main.java.Interface.Login.CadastrarInterface;
-import main.java.Interface.Login.LoginInterface;
+import main.java.entity.Gerenciador;
 import main.java.entity.member.*;
+import main.java.main.PrincipalAluno;
+import main.java.main.PrincipalConteudo;
+import main.java.main.PrincipalDisciplina;
+import main.java.main.PrincipalPergunta;
 
 import java.util.Scanner;
 
@@ -33,7 +36,7 @@ public class TelaInicialInterface extends Interface {
         System.out.println("");
     }
 
-    public void boasVindas() {
+    public void boasVindas() throws Exception{
         System.out.println("Seja bem-vindo ao DA A RESPOSTA AÍ! Aqui os alunos e monitores de matérias da Unicamp se ajudam \ncom respostas de exercícios e conteúdos!");
         System.out.println("Para utilizar, você precisa se cadastrar ou realizar login como aluno, professor ou monitor. \nDigite o número da opção desejada:\n");
 
@@ -73,7 +76,7 @@ public class TelaInicialInterface extends Interface {
         System.out.println("4 - Sair");
     }
 
-    private void mostrarLoginCadastrar(TipoDeUsuario tipoUsuario) {
+    private void mostrarLoginCadastrar(TipoDeUsuario tipoUsuario) throws Exception {
         System.out.println("(1) Login");
         System.out.println("(2) Cadastrar");
         System.out.println("(3) Voltar");

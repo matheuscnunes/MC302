@@ -20,7 +20,12 @@ public class PrincipalLogin {
         boolean login = false;
 
         while(login == false){
-            login = login(input);
+            try {
+                login = login(input);
+            }
+            catch (Exception e){
+                System.err.println(e.getMessage());
+            }
 
             if(login){
                 Principal.main(null);
@@ -30,7 +35,7 @@ public class PrincipalLogin {
         }
     }
 
-    public static boolean login(Scanner input) {
+    public static boolean login(Scanner input) throws Exception{
         String email = "", senha;
 
         email = obtemEmail(input);

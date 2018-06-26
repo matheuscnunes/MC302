@@ -30,7 +30,7 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Login  ///////////////////////
-    private static boolean verifyLoginAdmin(String email, String senha) {
+    private static boolean verifyLoginAdmin(String email, String senha){
         if (email.equals("admin") && senha.equals("admin")) {
             Usuario admin = new Aluno(1, 1, 1, "admin", "admin", "admin");
             usuarioAtual = admin;
@@ -39,74 +39,66 @@ public class Gerenciador {
 
         return false;
     }
-    public static boolean login(TipoDeUsuario tipoUsuario, String email, String senha) {
+    public static boolean login(TipoDeUsuario tipoUsuario, String email, String senha) throws Exception{
         if (verifyLoginAdmin(email, senha)) {
             System.out.println("****** Admin logged ******");
             return true;
         }
         switch (tipoUsuario) {
             case PROFESSOR:
-                return loginProfessor(email, senha);
+                loginProfessor(email, senha);
             case ALUNO:
-                return loginAluno(email, senha);
+                loginAluno(email, senha);
             case MONITOR:
-                return loginMonitor(email, senha);
+                loginMonitor(email, senha);
         }
-        return false;
+        return true;
     }
 
-    private static boolean loginAluno(String email, String senha) {
+    private static void loginAluno(String email, String senha) throws Exception{
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };
 
         List<Aluno> alunosAchados = alunos.stream().filter(predicate).collect(Collectors.toList());
         if (alunosAchados.size() < 1) {
-            System.out.println("Não foi encontrado aluno cadastrado com o email (" + email + ") e senha (" + senha + ")");
-            return false;
+            throw new Exception("Não foi encontrado aluno cadastrado com o email (" + email + ") e senha (" + senha + ")");
         }
         if (alunosAchados.size() > 1) {
-            System.out.println("Foram encontrados vários alunos com o email (" + email + ") e senha (" + senha + ") : " + alunosAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
+            throw new Exception("Foram encontrados vários alunos com o email (" + email + ") e senha (" + senha + ") : " + alunosAchados.toString() + ". Será utilizado somente o primeiro.");
         }
         usuarioAtual = alunosAchados.get(0);
-        return true;
     }
 
-    private static boolean loginProfessor(String email, String senha) {
+    private static void loginProfessor(String email, String senha) throws Exception{
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };
 
         List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
         if (profsAchados.size() < 1) {
-            System.out.println("Não foi encontrado professor cadastrado com o email (" + email + ") e senha (" + senha + ")");
-            return false;
+            throw new Exception("Não foi encontrado professor cadastrado com o email (" + email + ") e senha (" + senha + ")");
+
         }
         if (profsAchados.size() > 1) {
-            System.out.println("Foram encontrados vários professores com o email (" + email + ") e senha (" + senha + ") : " + profsAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
+            throw new Exception("Foram encontrados vários professores com o email (" + email + ") e senha (" + senha + ") : " + profsAchados.toString() + ". Será utilizado somente o primeiro.");
         }
         usuarioAtual = profsAchados.get(0);
-        return true;
     }
 
-    private static boolean loginMonitor(String email, String senha) {
+    private static void loginMonitor(String email, String senha) throws Exception{
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };
 
         List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
         if (monitoresAchados.size() < 1) {
-            System.out.println("Não foi encontrado monitor cadastrado com o email (" + email + ") e senha (" + senha + ")");
-            return false;
+            throw new Exception("Não foi encontrado monitor cadastrado com o email (" + email + ") e senha (" + senha + ")");
         }
         if (monitoresAchados.size() > 1) {
-            System.out.println("Foram encontrados vários monitores com o email (" + email + ") e senha (" + senha + ") : " + monitoresAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
+            throw new Exception("Foram encontrados vários monitores com o email (" + email + ") e senha (" + senha + ") : " + monitoresAchados.toString() + ". Será utilizado somente o primeiro.");
         }
         usuarioAtual = monitoresAchados.get(0);
-        return true;
     }
 
     public static int proximoId() {
@@ -125,7 +117,7 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Alunos  ///////////////////////
-    public static void adicionarUsuatio(Usuario user) {
+    public static void adicionarUsuatio(Usuario user) throws Exception{
         if (user == null)
             throw new NullPointerException("[Adicionar Usuario] O usuario a ser adicionado não pode ser nulo");
         if (user instanceof Monitor)
@@ -138,7 +130,7 @@ public class Gerenciador {
             throw new Error("User deve ser uma instância de Aluno, Professor ou Monitor.");
     }
 
-    public static void adicionarAluno(Aluno aluno) {
+    public static void adicionarAluno(Aluno aluno) throws Exception{
         if (aluno == null)
             throw new NullPointerException("[Adicionar Aluno] O aluno a ser adicionado não pode ser nulo");
 
@@ -232,13 +224,13 @@ public class Gerenciador {
         return null;
     }
 
-    public static List<Conteudo> buscaConteudos(String autor) {
+    public static List<Conteudo> buscaConteudos(String autor) throws Exception{
         return conteudos.stream().filter(conteudo -> {
             return conteudo.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
     }
 
-    public static List<Post> filtrarPorAutor(ArrayList<Post> postagens, String autor) {
+    public static List<Post> filtrarPorAutor(ArrayList<Post> postagens, String autor) throws Exception{
         return postagens.stream().filter(post -> {
             return post.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
@@ -246,7 +238,7 @@ public class Gerenciador {
 
 
 
-    public static List<Pergunta> buscarPerguntas(String autor) {
+    public static List<Pergunta> buscarPerguntas(String autor) throws Exception{
         return perguntas.stream().filter(pergunta -> {
             return pergunta.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
@@ -278,7 +270,7 @@ public class Gerenciador {
         }
     }
 
-    private static ComentarioRemocao buscarComentarioEmConteudos(int comentarioId){
+    private static ComentarioRemocao buscarComentarioEmConteudos(int comentarioId) throws Exception{
         if (conteudos != null){
             for (Conteudo conteudo : conteudos){
                 List<Comentario> comentariosBuscados = conteudo.getComentarios().stream().filter(
@@ -291,7 +283,7 @@ public class Gerenciador {
         return null;
     }
 
-    private static ComentarioRemocao buscarComentarioEmPerguntas(int comentarioId){
+    private static ComentarioRemocao buscarComentarioEmPerguntas(int comentarioId) throws Exception{
         if (perguntas != null){
             for (Pergunta pergunta : perguntas){
                 List<Comentario> comentariosBuscados = pergunta.getComentarios().stream().filter(
@@ -304,7 +296,8 @@ public class Gerenciador {
         return null;
     }
 
-    public static Comentario removerComentarioEmConteudo(int comentarioId){
+    public static Comentario removerComentarioEmConteudo(int comentarioId) throws Exception
+    {
         ComentarioRemocao comentarioRemocao = buscarComentarioEmConteudos(comentarioId);
         if (comentarioRemocao != null) {
             Conteudo conteudo = (Conteudo)comentarioRemocao.getPost();
@@ -315,7 +308,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static Comentario removerComentarioEmPergunta(int comentarioId){
+    public static Comentario removerComentarioEmPergunta(int comentarioId) throws Exception{
         ComentarioRemocao comentarioRemocao = buscarComentarioEmPerguntas(comentarioId);
         if (comentarioRemocao != null) {
             Pergunta pergunta = (Pergunta)comentarioRemocao.getPost();
@@ -326,7 +319,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static Conteudo removerConteudo(int id){
+    public static Conteudo removerConteudo(int id) throws Exception{
         Conteudo conteudo = buscaConteudo(id);
         if (conteudo != null){
             conteudos.remove(conteudo);
@@ -335,7 +328,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static Pergunta removerPergunta(int id){
+    public static Pergunta removerPergunta(int id) throws Exception{
         Pergunta pergunta = buscaPergunta(id);
         if (pergunta != null){
             perguntas.remove(pergunta);
@@ -344,22 +337,8 @@ public class Gerenciador {
         return null;
     }
 
-    public static Post removerPostagem(Post p) {
-        if(p instanceof Conteudo)
-            return removerConteudo(p.getID());
-        if(p instanceof Pergunta)
-            return removerPergunta(p.getID());
-        if(p instanceof Comentario) {
-            Comentario removido = removerComentarioEmConteudo(p.getID());
-            if(removido == null)
-                return removerComentarioEmPergunta(p.getID());
-            return removido;
-        }
-        return null;
-    }
-
     ////////////         Métodos de gerenciamento de Professores  ///////////////////////
-    public static void adicionarProfessor(Professor professor) {
+    public static void adicionarProfessor(Professor professor) throws Exception{
         if (professor == null)
             throw new NullPointerException("[Adicionar Professor] O professor a ser adicionado não pode ser nulo");
 
@@ -372,7 +351,7 @@ public class Gerenciador {
         professores.add(professor);
     }
 
-    public static Professor removerProfessor(int id) {
+    public static Professor removerProfessor(int id) throws Exception{
         Professor profEncontrado = buscaProfessor(id);
 
         if (profEncontrado == null) {
@@ -388,7 +367,7 @@ public class Gerenciador {
         return professores;
     }
 
-    public static Professor buscaProfessor(int id) {
+    public static Professor buscaProfessor(int id) throws Exception{
         List<Professor> professoresAchados = professores.stream().filter(professor -> {
             return professor.id == id;
         }).collect(Collectors.toList());
@@ -400,7 +379,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static Professor buscaProfessor(String email) {
+    public static Professor buscaProfessor(String email) throws Exception{
         List<Professor> professoresAchados = professores.stream().filter(professor -> {
             return professor.getEmail().equals(email);
         }).collect(Collectors.toList());
@@ -413,7 +392,7 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Monitores  ///////////////////////
-    public static void adicionarMonitor(Monitor monitor) {
+    public static void adicionarMonitor(Monitor monitor) throws Exception{
         if (monitor == null)
             throw new NullPointerException("[Adicionar Monitor] O monitor a ser adicionado não pode ser nulo");
 
@@ -442,7 +421,7 @@ public class Gerenciador {
         perguntas.add(pergunta);
     }
 
-    public static Monitor removerMonitor(int ra) {
+    public static Monitor removerMonitor(int ra) throws Exception{
         Monitor monitorEncontrado = buscaMonitor(ra);
 
         if (monitorEncontrado == null) {
@@ -458,7 +437,7 @@ public class Gerenciador {
         return monitores;
     }
 
-    public static Monitor buscaMonitor(int ra) {
+    public static Monitor buscaMonitor(int ra) throws Exception{
         List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
             return monitor.ra == ra;
         }).collect(Collectors.toList());
@@ -470,7 +449,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static Monitor buscaMonitor(String email) {
+    public static Monitor buscaMonitor(String email) throws Exception{
         List<Monitor> monitorersAchados = monitores.stream().filter(monitor -> {
             return monitor.getEmail().equals(email);
         }).collect(Collectors.toList());
@@ -482,7 +461,7 @@ public class Gerenciador {
         return null;
     }
 
-    public static List<Usuario> buscarTodosUsuarios() {
+    public static List<Usuario> buscarTodosUsuarios() throws Exception{
         List<Usuario> usuarios = new ArrayList<Usuario>();
         if (professores != null) {
             usuarios.addAll(professores);
@@ -497,7 +476,7 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Disciplinas  ///////////////////////
-    public static void adicionarDisciplina(Disciplina disciplina) {
+    public static void adicionarDisciplina(Disciplina disciplina) throws Exception{
         if (disciplina == null)
             throw new NullPointerException("[Adicionar Disciplina] A disciplina a ser adicionado não pode ser nula");
 
@@ -506,7 +485,7 @@ public class Gerenciador {
         disciplinas.add(disciplina);
     }
 
-    public static Disciplina removerDisciplina(String codigo) {
+    public static Disciplina removerDisciplina(String codigo) throws Exception{
         Disciplina disciplinaEncontrada = buscaDisciplina(codigo);
 
         if (disciplinaEncontrada == null) {
@@ -522,7 +501,7 @@ public class Gerenciador {
         return disciplinas;
     }
 
-    public static Disciplina buscaDisciplina(String codigo) {
+    public static Disciplina buscaDisciplina(String codigo) throws Exception{
         List<Disciplina> disciplinasAchadas = disciplinas.stream().filter(disciplina -> {
             return disciplina.getCodigo().equals(codigo);
         }).collect(Collectors.toList());
@@ -535,7 +514,7 @@ public class Gerenciador {
     }
 
     ////////////         Métodos de gerenciamento de Turmas  ///////////////////////
-    public static void adicionarTurma(Turma turma) {
+    public static void adicionarTurma(Turma turma) throws Exception{
         if (turma == null)
             throw new NullPointerException("[Adicionar Turma] A turma a ser adicionado não pode ser nula");
 
@@ -544,7 +523,7 @@ public class Gerenciador {
         turmas.add(turma);
     }
 
-    public static Turma removerTurma(int id) {
+    public static Turma removerTurma(int id) throws Exception{
         Turma turmaEncontrada = buscaTurma(id);
 
         if (turmaEncontrada == null) {
@@ -560,7 +539,7 @@ public class Gerenciador {
         return turmas;
     }
 
-    public static Turma buscaTurma(int id) {
+    public static Turma buscaTurma(int id) throws Exception{
         List<Turma> turmasEncontradas = turmas.stream().filter(turma -> {
             return turma.getId() == id;
         }).collect(Collectors.toList());

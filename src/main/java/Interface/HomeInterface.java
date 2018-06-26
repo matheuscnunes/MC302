@@ -1,7 +1,8 @@
 package main.java.Interface;
 
-import main.java.Interface.Posts.PostsInterface;
 import main.java.entity.Gerenciador;
+import main.java.entity.member.TipoDeUsuario;
+import main.java.entity.member.Usuario;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class HomeInterface extends Interface {
 
     public HomeInterface(Scanner input) { super(input); }
 
-    public void exibirHome() {
+    public void exibirHome() throws Exception{
         Utils.stringPrinter("Bem-vindo, %s!\n", Gerenciador.getUsarioAtual().getNome());
 
         System.out.println("Digite o número da opção desejada e aperte enter:");
@@ -26,7 +27,7 @@ public class HomeInterface extends Interface {
         System.out.println("--------------------");
     }
 
-    private void capturarOpcaoEscolhida() {
+    private void capturarOpcaoEscolhida() throws Exception{
         int op = input.nextInt();
         switch(op) {
             case 1:

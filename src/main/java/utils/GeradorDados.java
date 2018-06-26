@@ -13,6 +13,7 @@ import main.java.entity.member.Monitor;
 import main.java.entity.member.Professor;
 import main.java.entity.member.Usuario;
 
+import javax.sound.midi.SysexMessage;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -23,14 +24,39 @@ import java.util.stream.Collectors;
 public class GeradorDados {
 
     public static void gerarDados() {
-        geraAlunos();
-        geraMonitores();
-        geraProfessores();
-        geraDisciplina();
-        geraTurmas();
+        try {
+            geraAlunos();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        try {
+            geraMonitores();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        try {
+            geraProfessores();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        try {
+            geraDisciplina();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        try {
+            geraTurmas();
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
-    private static void geraAlunos() {
+    private static void geraAlunos() throws Exception{
         Aluno nudes = new Aluno(Gerenciador.proximoId(), 203373, 32, "Matheus Nudes", "matheus@gmail.com", "123");
         Aluno fritz = new Aluno(Gerenciador.proximoId(), 203263, 32, "Mateus Fritz", "mateus@gmail.com", "123");
         Aluno battle = new Aluno(Gerenciador.proximoId(), 197960, 32, "Giovanna Battle", "giovanna@gmail.com", "123");
@@ -44,7 +70,7 @@ public class GeradorDados {
         Gerenciador.adicionarAluno(chefinho);
     }
 
-    private static void geraMonitores() {
+    private static void geraMonitores() throws  Exception{
         Monitor zejao = new Monitor(Gerenciador.proximoId(), 999666, 42, "Zejão", "ze@gmail.com", "pastel e itubaina");
         Monitor pontinho = new Monitor(Gerenciador.proximoId(), 110022, 42, "Pontinho", "pontinho@gmail.com", ".");
 
@@ -52,7 +78,7 @@ public class GeradorDados {
         Gerenciador.adicionarMonitor(pontinho);
     }
 
-    private static void geraProfessores() {
+    private static void geraProfessores() throws Exception{
         Professor julinho = new Professor(Gerenciador.proximoId(), "Julio Cesar", "reizinho@ic.br", "123");
         final Professor CA = new Professor(Gerenciador.proximoId(), "Arnaldo 358", "358@ic.br", "santana");
         Professor mozao = new Professor(Gerenciador.proximoId(), "Anne Bronzi", "linda@imecc.br", "123");
@@ -76,7 +102,7 @@ public class GeradorDados {
         }
     }
 
-    private static void geraTurmas() {
+    private static void geraTurmas() throws Exception{
 
         List<Post> posts1 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {

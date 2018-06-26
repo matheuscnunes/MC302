@@ -33,7 +33,12 @@ public class PrincipalPergunta {
                     buscarPerguntaPorId(input);
                     break;
                 case 3:
-                    buscarPerguntasPorAutor(input);
+                    try {
+                        buscarPerguntasPorAutor(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     buscarPerguntas();
@@ -146,7 +151,7 @@ public class PrincipalPergunta {
         }
     }
 
-    private static void buscarPerguntasPorAutor(Scanner input){
+    private static void buscarPerguntasPorAutor(Scanner input) throws Exception{
         String autor = "";
         do{
             System.out.println("Digite o nome do autor para buscar as perguntas : ");
