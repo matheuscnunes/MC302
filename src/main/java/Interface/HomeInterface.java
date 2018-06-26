@@ -1,5 +1,6 @@
 package main.java.Interface;
 
+import main.java.Interface.Posts.CriarPostsInterface;
 import main.java.Interface.Posts.PostsInterface;
 import main.java.entity.Gerenciador;
 import main.java.utils.Utils;
@@ -34,6 +35,8 @@ public class HomeInterface extends Interface {
                 postsInterface.exibirPost();
                 break;
             case 2:
+                CriarPostsInterface criarPostsInterface = new CriarPostsInterface(input);
+                criarPostsInterface.criarPost();
                 break;
             case 3:
                 break;
