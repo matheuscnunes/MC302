@@ -55,7 +55,7 @@ public class TelaInicialInterface extends Interface {
                         mostrarLoginCadastrar(TipoDeUsuario.MONITOR);
                         break;
                     case SAIR:
-                        System.out.println("Bye JAVAlis");
+                        System.out.println("Bye, JAVAlis");
                         return;
                     default:
                         System.out.println("Comando não reconhecido!");
