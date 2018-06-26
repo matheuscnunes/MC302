@@ -1,11 +1,13 @@
 package main.java.entity;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
 import main.java.entity.content.Post;
-import main.java.entity.member.*;
+import main.java.entity.member.Aluno;
+import main.java.entity.member.Monitor;
+import main.java.entity.member.Professor;
+import main.java.entity.member.Usuario;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,73 +41,39 @@ public class Gerenciador {
 
         return false;
     }
-    public static boolean login(TipoDeUsuario tipoUsuario, String email, String senha) {
+
+    public static boolean login(String email, String senha) {
         if (verifyLoginAdmin(email, senha)) {
             System.out.println("****** Admin logged ******");
             return true;
         }
-        switch (tipoUsuario) {
-            case PROFESSOR:
-                return loginProfessor(email, senha);
-            case ALUNO:
-                return loginAluno(email, senha);
-            case MONITOR:
-                return loginMonitor(email, senha);
-        }
-        return false;
-    }
 
-    private static boolean loginAluno(String email, String senha) {
+
         Predicate<Usuario> predicate = usuario -> {
             return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
         };
 
         List<Aluno> alunosAchados = alunos.stream().filter(predicate).collect(Collectors.toList());
-        if (alunosAchados.size() < 1) {
-            System.out.println("Não foi encontrado aluno cadastrado com o email (" + email + ") e senha (" + senha + ")");
-            return false;
-        }
-        if (alunosAchados.size() > 1) {
-            System.out.println("Foram encontrados vários alunos com o email (" + email + ") e senha (" + senha + ") : " + alunosAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
-        }
-        usuarioAtual = alunosAchados.get(0);
-        return true;
-    }
-
-    private static boolean loginProfessor(String email, String senha) {
-        Predicate<Usuario> predicate = usuario -> {
-            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
-        };
-
         List<Professor> profsAchados = professores.stream().filter(predicate).collect(Collectors.toList());
-        if (profsAchados.size() < 1) {
-            System.out.println("Não foi encontrado professor cadastrado com o email (" + email + ") e senha (" + senha + ")");
-            return false;
-        }
-        if (profsAchados.size() > 1) {
-            System.out.println("Foram encontrados vários professores com o email (" + email + ") e senha (" + senha + ") : " + profsAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
-        }
-        usuarioAtual = profsAchados.get(0);
-        return true;
-    }
-
-    private static boolean loginMonitor(String email, String senha) {
-        Predicate<Usuario> predicate = usuario -> {
-            return usuario.getEmail().equals(email) && usuario.getSenha().equals(senha);
-        };
-
         List<Monitor> monitoresAchados = monitores.stream().filter(predicate).collect(Collectors.toList());
-        if (monitoresAchados.size() < 1) {
-            System.out.println("Não foi encontrado monitor cadastrado com o email (" + email + ") e senha (" + senha + ")");
+
+        List<Usuario> usersAchados = new ArrayList<>();
+        usersAchados.addAll(alunosAchados);
+        usersAchados.addAll(profsAchados);
+        usersAchados.addAll(monitoresAchados);
+
+        if (usersAchados.size() < 1) {
+            System.out.println("Não foi encontrado usuário cadastrado com o email (" + email + ") e senha (" + senha + ")");
             return false;
         }
-        if (monitoresAchados.size() > 1) {
-            System.out.println("Foram encontrados vários monitores com o email (" + email + ") e senha (" + senha + ") : " + monitoresAchados.toString() + ". Será utilizado somente o primeiro.");
-            return false;
+
+        if (usersAchados.size() > 1) {
+            System.out.println("Foram encontrados vários usuários com o email (" + email + ") e senha (" + senha + ") : " + usersAchados.toString() + ". Será utilizado somente o primeiro.");
+            usuarioAtual = usersAchados.get(0);
+            return true;
         }
-        usuarioAtual = monitoresAchados.get(0);
+
+        usuarioAtual = usersAchados.get(0);
         return true;
     }
 
@@ -192,24 +160,26 @@ public class Gerenciador {
         return null;
     }
 
-    public static void adicionarComentario(Post postagem, String textoComentario) throws Exception {
-        if (postagem != null) {
-            Comentario comentario = new Comentario(
-                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
-            postagem.addComentario(comentario);
-        } else {
-            throw new Exception("Não é possível adicionar comentário sem uma postagem!");
-        }
-    }
-
     public static void adicionarComentarioEmConteudo(int conteudoId, String textoComentario) throws Exception {
         Conteudo conteudo = buscaConteudo(conteudoId);
-        adicionarComentario(conteudo, textoComentario);
+        if (conteudo != null) {
+            Comentario comentario = new Comentario(
+                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
+            conteudo.addComentario(comentario);
+        } else {
+            throw new Exception("Conteúdo não existente pelo ID informado");
+        }
     }
 
     public static void adicionarComentarioEmPergunta(int perguntaId, String textoComentario) throws Exception {
         Pergunta pergunta = buscaPergunta(perguntaId);
-        adicionarComentario(pergunta, textoComentario);
+        if (pergunta != null) {
+            Comentario comentario = new Comentario(
+                    Gerenciador.proximoId(), new Date(), usuarioAtual, textoComentario);
+            pergunta.addComentario(comentario);
+        } else {
+            throw new Exception("Pergunta não existente pelo ID informado");
+        }
     }
 
     public static Pergunta buscaPergunta(int id) {
@@ -244,20 +214,10 @@ public class Gerenciador {
         }).collect(Collectors.toList());
     }
 
-
-
     public static List<Pergunta> buscarPerguntas(String autor) {
         return perguntas.stream().filter(pergunta -> {
             return pergunta.getAutor().getNome().equals(autor);
         }).collect(Collectors.toList());
-    }
-
-    public static List<Conteudo> buscaConteudos(){
-        return conteudos;
-    }
-
-    public static List<Pergunta> buscarPerguntas(){
-        return perguntas;
     }
 
     private static class ComentarioRemocao{
@@ -296,7 +256,7 @@ public class Gerenciador {
             for (Pergunta pergunta : perguntas){
                 List<Comentario> comentariosBuscados = pergunta.getComentarios().stream().filter(
                         comentario -> {return comentario.getID() == comentarioId;}).collect(Collectors.toList());
-                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()) {
+                if (comentariosBuscados != null && !comentariosBuscados.isEmpty()){
                     return new ComentarioRemocao(comentariosBuscados.get(0), pergunta);
                 }
             }
@@ -542,6 +502,136 @@ public class Gerenciador {
         return turmaEncontrada;
     }
 
+    public static void adicionarAlunoEmTurma(Turma turma, Aluno aluno) {
+        try {
+            turma.adicionarAluno(aluno);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean removerAlunoEmTurma(Turma turma, List<Aluno> alunos) {
+        try {
+            return turma.removerAluno(alunos);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean removerAlunoEmTurma(Turma turma, Aluno aluno) {
+        try {
+            return turma.removerAluno(aluno);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Aluno removerAlunoEmTurma(Turma turma, int id) {
+        try {
+            return turma.removerAluno(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public void adicionarPostEmTurma(Turma turma, Post post) {
+        try {
+            turma.adicionarPost(post);
+
+            if (post instanceof Conteudo) {
+                adicionarConteudo((Conteudo) post);
+            } else {
+                adicionarPergunta((Pergunta) post);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean removerPostEmTurma(Turma turma, List<Post> posts) {
+        try {
+            if (posts instanceof Conteudo) {
+                for (Post post : posts) {
+                    if (post instanceof Conteudo) {
+                        removerConteudo(post.getID());
+                    } else {
+                        removerPergunta(post.getID());
+                    }
+                }
+            }
+            return turma.removerPost(posts);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removerPostEmTurma(Turma turma, Post post) {
+        try {
+            if (post instanceof Conteudo) {
+                removerConteudo(post.getID());
+            } else {
+                removerPergunta(post.getID());
+            }
+            return turma.removerPost(post);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Post removerPostEmTurma(Turma turma, int id) {
+        try {
+            if (buscaConteudo(id) != null) {
+                removerConteudo(id);
+            } else {
+                removerPergunta(id);
+            }
+            return turma.removerPost(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void adicionarMonitorEmTurma(Turma turma, Monitor monitor) {
+        try {
+            turma.adicionarMonitor(monitor);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean removerMonitorEmTurma(Turma turma, List<Monitor> monitores) {
+        try {
+            return turma.removerMonitor(monitores);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removerMonitorEmTurma(Turma turma, Monitor monitor) {
+        try {
+            return turma.removerMonitor(monitor);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Monitor removerMonitorEmTurma(Turma turma, int id) {
+        try {
+            return turma.removerMonitor(id);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static List<Turma> buscarTodasTurmas() {
         return turmas;
     }
@@ -556,10 +646,6 @@ public class Gerenciador {
         }
 
         return null;
-    }
-
-    public static Usuario getUsuarioLogado() {
-        return usuarioAtual;
     }
 
     public List<Professor> getProfessores() {
@@ -606,7 +692,7 @@ public class Gerenciador {
         this.turmas = turmas;
     }
 
-    public Usuario getUsuarioAtual() {
+    public static Usuario getUsuarioLogado() {
         return usuarioAtual;
     }
 
