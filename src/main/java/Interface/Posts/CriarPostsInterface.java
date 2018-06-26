@@ -28,6 +28,8 @@ public class CriarPostsInterface extends Interface {
             Usuario autor = Gerenciador.getUsuarioLogado();
             String tituloPost, conteudo;
 
+            printlnAmarelo("\nCriando um novo post...");
+
             printaOpcoes();
             tipoDePost = input.nextInt();
 
@@ -40,18 +42,18 @@ public class CriarPostsInterface extends Interface {
             if (tipoDePost == 1) {
                 Conteudo novoPost = new Conteudo(ID, date, autor, conteudo, tituloPost);
                 Gerenciador.adicionarConteudo(novoPost);
-                printlnRoxo("Conteúdo adicionado com sucesso!");
+                printlnRoxo("\nConteúdo adicionado com sucesso!\n");
             } else if (tipoDePost == 2) {
                 Pergunta novoPost = new Pergunta(ID, date, autor, conteudo, tituloPost, false);
                 Gerenciador.adicionarPergunta(novoPost);
-                printlnRoxo("Pergunta adicionada com sucesso!");
+                printlnRoxo("\nPergunta adicionada com sucesso!\n");
             }
-
-
+            sair();
         }
         catch(Exception e) {
-            System.out.println("Não foi possível adicionar o comentário: ");
+            System.out.println("\nNão foi possível adicionar o comentário: ");
             e.printStackTrace();
+            sair();
         }
     }
 
@@ -63,7 +65,6 @@ public class CriarPostsInterface extends Interface {
     }
 
     private void sair() {
-        System.out.println("Saindo dos conteúdos..");
         HomeInterface homeInterface = new HomeInterface(input);
         homeInterface.exibirHome();
     }
