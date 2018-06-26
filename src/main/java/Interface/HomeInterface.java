@@ -39,6 +39,9 @@ public class HomeInterface extends Interface {
                 criarPostsInterface.criarPost();
                 break;
             case 3:
+                Gerenciador.deslogar();
+                System.out.println("Bye, JAVAlis");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Comando não reconhecido!");

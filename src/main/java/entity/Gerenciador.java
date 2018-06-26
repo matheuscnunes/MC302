@@ -600,16 +600,24 @@ public class Gerenciador {
             e.printStackTrace();
         }
         if (post instanceof Conteudo) {
-            adicionarConteudo( (Conteudo) post );
+            try {
+                adicionarConteudo((Conteudo)post);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            adicionarConteudo( (Pergunta) post );
+            try {
+                adicionarPergunta((Pergunta)post);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public boolean removerPostEmTurma(Turma turma, List<Post> posts) {
         try {
             if (posts instanceof Conteudo) {
-                removerConteudo(posts.getID());
+                removerConteudo(((Conteudo) posts).getID());
             }
             return turma.removerPost(posts);
         } catch(Exception e) {
@@ -620,7 +628,7 @@ public class Gerenciador {
 
     public boolean removerPostEmTurma(Turma turma, Post post) {
         try {
-            return turma.removerPost();
+            return turma.removerPost(post);
         } catch(Exception e) {
             e.printStackTrace();
             return false;
