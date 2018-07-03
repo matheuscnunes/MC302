@@ -45,14 +45,20 @@ public class GerenciadorAluno implements IGerenciador<Aluno> {
     }
 
     @Override
-    public Aluno find(int id) throws Exception {
+    public Aluno find(int ra) throws Exception {
+        List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> aluno.getRa() == ra).collect(Collectors.toList());
+
+        if (alunosEncontrados.size() >= 1) {
+            return alunosEncontrados.get(0);
+        }
+
         return null;
     }
 
     @Override
-    public Aluno find(String id) throws Exception {
+    public Aluno find(String email) throws Exception {
         List<Aluno> alunosEncontrados = alunos.stream().filter(aluno -> {
-            return aluno.getEmail().equals(id);
+            return aluno.getEmail().equals(email);
         }).collect(Collectors.toList());
 
         if (alunosEncontrados.size() >= 1) {

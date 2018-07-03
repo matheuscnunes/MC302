@@ -2,13 +2,11 @@ package main.java.Interface.Posts;
 
 import main.java.Interface.HomeInterface;
 import main.java.Interface.Interface;
-import main.java.entity.Gerenciador;
-import main.java.entity.content.Comentario;
+import main.java.entity.GeradorSequencia;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
-import main.java.entity.content.Post;
 import main.java.entity.member.Usuario;
-import sun.management.HotspotMemoryMBean;
+import main.java.repositorio.GerenciadorLogin;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -23,9 +21,9 @@ public class CriarPostsInterface extends Interface {
 
         try {
             int tipoDePost;
-            int ID = Gerenciador.proximoId();
+            int ID = GeradorSequencia.nextSequencia();
             Date date = new Date();
-            Usuario autor = Gerenciador.getUsuarioLogado();
+            Usuario autor = GerenciadorLogin.getInstance().getUsuarioLogado();
             String tituloPost, conteudo;
 
             printlnAmarelo("\nCriando um novo post...");
@@ -39,6 +37,7 @@ public class CriarPostsInterface extends Interface {
             System.out.println("Insira o conteúdo do post: ");
             conteudo = input.next() + input.nextLine();
 
+            // TODO: É necessário pedir uma turma antes de cadastrar um conteudo ou pergunta
             if (tipoDePost == 1) {
                 Conteudo novoPost = new Conteudo(ID, date, autor, conteudo, tituloPost);
                 Gerenciador.adicionarConteudo(novoPost);
@@ -49,8 +48,7 @@ public class CriarPostsInterface extends Interface {
                 printlnRoxo("\nPergunta adicionada com sucesso!\n");
             }
             sair();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("\nNão foi possível adicionar o comentário: ");
             e.printStackTrace();
             sair();
@@ -65,7 +63,12 @@ public class CriarPostsInterface extends Interface {
     }
 
     private void sair() {
-        HomeInterface homeInterface = new HomeInterface(input);
-        homeInterface.exibirHome();
+        try {
+            HomeInterface homeInterface = new HomeInterface(input);
+            homeInterface.exibirHome();
+        } catch (Exception e) {
+            System.err.println("Não foi possível exibir a home. Message: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

@@ -2,6 +2,7 @@ package main.java.main;
 
 import main.java.repositorio.Gerenciador;
 import main.java.entity.member.TipoDeUsuario;
+import main.java.repositorio.GerenciadorLogin;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -40,7 +41,7 @@ public class PrincipalLogin {
 
         senha = obtemSenha(input);
 
-        return Gerenciador.login(TipoDeUsuario.ALUNO, email, senha);
+        return GerenciadorLogin.login(TipoDeUsuario.ALUNO, email, senha);
     }
 
     private static String obtemEmail(Scanner input) {

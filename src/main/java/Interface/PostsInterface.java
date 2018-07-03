@@ -1,9 +1,11 @@
 package main.java.Interface;
 
+import javafx.geometry.Pos;
 import main.java.Interface.Comentarios.ComentarioInterface;
 import main.java.Interface.HomeInterface;
 import main.java.Interface.Interface;
 import main.java.entity.GeradorSequencia;
+import main.java.entity.Turma;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
 import main.java.entity.content.Post;
@@ -161,12 +163,30 @@ public class PostsInterface extends Interface {
     }
 
     private void removerPostagemAtual() throws Exception {
-        Post postagemRemovida = Gerenciador.removerPostagem(getPostagens().get(indiceUltimoPostExibido));
-        if(postagemRemovida != null) {
-            postagens.remove(postagemRemovida);
-            if(postagensFiltradas != null)
-                postagensFiltradas.remove(postagemRemovida);
-            System.out.println("Postagem removida com sucesso!");
+        Post deletado = getPostagens().get(indiceUltimoPostExibido);
+
+        Boolean removido = false;
+        try {
+            for (Turma turma : GerenciadorTurma.getInstance().buscarTodos()) {
+                List<Post> posts = turma.getPosts().stream().filter(post -> post.getID() == deletado.getID())
+                        .collect(Collectors.toList());
+
+                if (posts.size() > 0) {
+                    Post postRemovido = posts.get(0);
+
+                    turma.removerPost(postRemovido);
+                    postagens.remove(postRemovido);
+                    if(postagensFiltradas != null) {
+                        postagensFiltradas.remove(postRemovido);
+                    }
+                    removido = true;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Não foi possível remover essa postagem :/");
+        }
+
+        if(removido) {
             proximoPost();
         } else {
             System.err.println("Não foi possível remover essa postagem :/");
