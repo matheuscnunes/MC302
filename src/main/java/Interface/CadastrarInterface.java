@@ -1,6 +1,6 @@
 package main.java.Interface;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.*;
 import main.java.utils.Utils;
 

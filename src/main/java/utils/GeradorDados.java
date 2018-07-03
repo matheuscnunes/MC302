@@ -1,7 +1,7 @@
 package main.java.utils;
 
 import main.java.entity.Disciplina;
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.Semestre;
 import main.java.entity.Turma;
 import main.java.entity.content.Comentario;
@@ -13,7 +13,6 @@ import main.java.entity.member.Monitor;
 import main.java.entity.member.Professor;
 import main.java.entity.member.Usuario;
 
-import javax.sound.midi.SysexMessage;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;

@@ -1,11 +1,9 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.TipoDeUsuario;
 import main.java.utils.Utils;
 
-import javax.xml.transform.sax.SAXSource;
-import java.io.Console;
 import java.util.Scanner;
 
 

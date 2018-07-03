@@ -1,8 +1,7 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.content.Comentario;
-import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
 import main.java.entity.member.Usuario;
 

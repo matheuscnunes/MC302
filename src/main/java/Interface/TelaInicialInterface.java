@@ -1,11 +1,6 @@
 package main.java.Interface;
 
-import main.java.entity.Gerenciador;
 import main.java.entity.member.*;
-import main.java.main.PrincipalAluno;
-import main.java.main.PrincipalConteudo;
-import main.java.main.PrincipalDisciplina;
-import main.java.main.PrincipalPergunta;
 
 import java.util.Scanner;
 

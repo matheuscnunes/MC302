@@ -1,7 +1,5 @@
 package main.java.Interface;
 
-import main.java.entity.Gerenciador;
-import main.java.entity.member.Aluno;
 import main.java.utils.Utils;
 
 import java.util.Scanner;

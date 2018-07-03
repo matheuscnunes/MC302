@@ -1,4 +1,4 @@
-package main.java.entity;
+package main.java.repositorio;
 
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;

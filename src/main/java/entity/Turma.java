@@ -114,4 +114,11 @@ public class Turma {
         }
         this.posts = posts;
     }
+
+    public void addPost(Post post) {
+        if (post != null) {
+            this.posts.add(post);
+        }
+    }
+
 }

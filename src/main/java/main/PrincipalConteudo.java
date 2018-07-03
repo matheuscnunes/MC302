@@ -1,12 +1,9 @@
 package main.java.main;
 
-import com.sun.org.apache.xml.internal.resolver.readers.ExtendedXMLCatalogReader;
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
-import main.java.entity.member.Aluno;
 import main.java.entity.member.Usuario;
-import main.java.utils.Utils;
 
 import java.util.Date;
 import java.util.List;

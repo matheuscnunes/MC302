@@ -1,15 +1,13 @@
-package main.java.entity;
+package main.java.repositorio;
 
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
-import main.java.entity.content.Pergunta;
 import main.java.entity.content.Post;
 import main.java.entity.member.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GerenciadorConteudo {
