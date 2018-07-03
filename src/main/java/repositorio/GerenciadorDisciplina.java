@@ -11,7 +11,17 @@ public class GerenciadorDisciplina implements IGerenciador<Disciplina> {
 
     private static List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 
-    public GerenciadorDisciplina() {
+    private static GerenciadorDisciplina gerenciadorDisciplina = null;
+
+    public static GerenciadorDisciplina getInstance() {
+        if (gerenciadorDisciplina == null) {
+            gerenciadorDisciplina = new GerenciadorDisciplina();
+        }
+
+        return gerenciadorDisciplina;
+    }
+
+    private GerenciadorDisciplina() {
         super();
     }
 

@@ -1,6 +1,6 @@
 package main.java.repositorio;
 
-import main.java.entity.member.*;
+import main.java.entity.member.Aluno;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,17 @@ public class GerenciadorAluno implements IGerenciador<Aluno> {
 
     private static List<Aluno> alunos = new ArrayList<Aluno>();
 
-    public GerenciadorAluno() {
+    private static GerenciadorAluno gerenciadorAluno = null;
+
+    public static GerenciadorAluno getInstance() {
+        if (gerenciadorAluno == null) {
+            gerenciadorAluno = new GerenciadorAluno();
+        }
+
+        return gerenciadorAluno;
+    }
+
+    private GerenciadorAluno() {
         super();
     }
 

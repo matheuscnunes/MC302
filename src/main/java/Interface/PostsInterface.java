@@ -24,14 +24,13 @@ public class PostsInterface extends Interface {
         this.postagens = new ArrayList<>();
         this.postagensFiltradas = null;
         GerenciadorTurma gerenciadorTurma = new GerenciadorTurma();
-        List<Conteudo> conteudos = new ArrayList<>();
-        List<Pergunta> perguntas = new ArrayList<>();
 
         try {
             gerenciadorTurma.buscarTodos().forEach(turma -> postagens.addAll(turma.getPosts()));
         } catch (Exception e) {
 
         }
+
         Conteudo conteudoFake = new Conteudo(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
         Pergunta perguntaFake = new Pergunta(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
         postagens.add(conteudoFake);

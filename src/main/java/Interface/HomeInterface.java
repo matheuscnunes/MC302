@@ -1,6 +1,7 @@
 package main.java.Interface;
 
 import main.java.repositorio.Gerenciador;
+import main.java.repositorio.GerenciadorLogin;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class HomeInterface extends Interface {
     public HomeInterface(Scanner input) { super(input); }
 
     public void exibirHome() throws Exception{
-        Utils.stringPrinter("Bem-vindo, %s!\n", Gerenciador.getUsarioAtual().getNome());
+        Utils.stringPrinter("Bem-vindo, %s!\n", GerenciadorLogin.getInstance().getUsuarioLogado().getNome());
 
         System.out.println("Digite o número da opção desejada e aperte enter:");
         mostrarOpcoesHome();

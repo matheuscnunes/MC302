@@ -2,6 +2,7 @@ package main.java.main;
 
 import main.java.repositorio.Gerenciador;
 import main.java.entity.Disciplina;
+import main.java.repositorio.GerenciadorDisciplina;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -63,7 +64,7 @@ public class PrincipalDisciplina {
 
         try {
             Disciplina disc = new Disciplina(id, nome, codigo);
-            Gerenciador.adicionarDisciplina(disc);
+            GerenciadorDisciplina.getInstance().add(disc);
             System.out.println("Disciplina adicionada com sucesso");
 
         } catch (Exception e) {
@@ -92,7 +93,7 @@ public class PrincipalDisciplina {
         System.out.println("Digite o código da disciplina:");
         codigo = input.next();
 
-        Disciplina discEncontrada = Gerenciador.buscaDisciplina(codigo);
+        Disciplina discEncontrada = GerenciadorDisciplina.getInstance().find(codigo);
 
         if (discEncontrada != null) {
             System.out.println(discEncontrada.toString());
@@ -107,7 +108,7 @@ public class PrincipalDisciplina {
         System.out.println("Digite o código da disciplina:");
         codigo = input.next();
 
-        Disciplina discRemovida = Gerenciador.removerDisciplina(codigo);
+        Disciplina discRemovida = GerenciadorDisciplina.getInstance().remover(codigo);
 
         if (discRemovida != null) {
             System.out.println("A disciplina " + discRemovida.getNome() + " de codigo " + codigo + " foi removida");

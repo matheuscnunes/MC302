@@ -31,7 +31,7 @@ public class TelaInicialInterface extends Interface {
         System.out.println("");
     }
 
-    public void boasVindas() throws Exception{
+    public void boasVindas() throws Exception {
         System.out.println("Seja bem-vindo ao DA A RESPOSTA AÍ! Aqui os alunos e monitores de matérias da Unicamp se ajudam \ncom respostas de exercícios e conteúdos!");
         System.out.println("Para utilizar, você precisa se cadastrar ou realizar login como aluno, professor ou monitor. \nDigite o número da opção desejada:\n");
 

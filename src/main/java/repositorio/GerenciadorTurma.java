@@ -11,7 +11,17 @@ public class GerenciadorTurma implements IGerenciador<Turma> {
 
     private static List<Turma> turmas = new ArrayList<Turma>();
 
-    public GerenciadorTurma() {
+    private static GerenciadorTurma gerenciadorTurma = null;
+
+    public static GerenciadorTurma getInstance() {
+        if (gerenciadorTurma == null) {
+            gerenciadorTurma = new GerenciadorTurma();
+        }
+
+        return gerenciadorTurma;
+    }
+
+    private GerenciadorTurma() {
         super();
     }
 
