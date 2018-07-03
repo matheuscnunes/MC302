@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GeradorDados {
+public abstract class GeradorDados {
 
     public static void gerarDados() {
         try {

@@ -1,5 +1,8 @@
 package main.java.Interface;
 
+import main.java.Interface.Comentarios.ComentarioInterface;
+import main.java.Interface.HomeInterface;
+import main.java.Interface.Interface;
 import main.java.entity.GeradorSequencia;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
@@ -23,7 +26,7 @@ public class PostsInterface extends Interface {
         super(input);
         this.postagens = new ArrayList<>();
         this.postagensFiltradas = null;
-        GerenciadorTurma gerenciadorTurma = new GerenciadorTurma();
+        GerenciadorTurma gerenciadorTurma = GerenciadorTurma.getInstance();
 
         try {
             gerenciadorTurma.buscarTodos().forEach(turma -> postagens.addAll(turma.getPosts()));
@@ -31,8 +34,8 @@ public class PostsInterface extends Interface {
 
         }
 
-        Conteudo conteudoFake = new Conteudo(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
-        Pergunta perguntaFake = new Pergunta(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
+        Conteudo conteudoFake = new Conteudo(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getInstance().getUsuarioLogado(), "PUTA TEXTO DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor conteudo!");
+        Pergunta perguntaFake = new Pergunta(GeradorSequencia.nextSequencia(), new Date(), GerenciadorLogin.getInstance().getUsuarioLogado(), "PUTA PERGUNTA DAORA AQUI SENSA SENSA SENSA SENSA \n AAAA ASIASOJSFGHDSKLDFJFKLSDAJLKS;DJFKLS;D \n SLDKFJKLJ JSADFKH".toLowerCase(), "Melhor Pergunta!", true);
         postagens.add(conteudoFake);
         postagens.add(perguntaFake);
         //TODO: ORDENAR POSTAGENS POR DATA!!
@@ -93,7 +96,7 @@ public class PostsInterface extends Interface {
     }
 
     private void mostrarBotaoRespostasFiltrarDeletarVoltar(Post postagem) {
-        if (postagem.getAutor().equals(GerenciadorLogin.getUsuarioLogado())) {
+        if (postagem.getAutor().equals(GerenciadorLogin.getInstance().getUsuarioLogado())) {
             printlnAzul(" ======================    ================ " + ANSI_RED + "   ================ " + ANSI_BLUE + "   ===============");
             printlnAzul("|| (3) VER RESPOSTAS  ||  || (4) FILTRAR  ||" + ANSI_RED + "  || (5) DELETAR  ||" + ANSI_BLUE + "  || (6) Voltar  ||");
             printlnAzul(" ======================    ================ " + ANSI_RED + "   ================ " + ANSI_BLUE + "   ===============");
@@ -106,7 +109,7 @@ public class PostsInterface extends Interface {
     }
 
     private void mostrarBotaoComentariosFiltrarDeletarVoltar(Post postagem) {
-        if (postagem.getAutor().equals(GerenciadorLogin.getUsuarioLogado())) {
+        if (postagem.getAutor().equals(GerenciadorLogin.getInstance().getUsuarioLogado())) {
             printlnAzul(" ====================    ================ " + ANSI_RED + "   ================ " + ANSI_BLUE + "   ===============");
             printlnAzul("|| (3) COMENTÁRIOS  ||  || (4) FILTRAR  ||" + ANSI_RED + "  || (5) DELETAR  ||" + ANSI_BLUE + "  || (6) Voltar  ||");
             printlnAzul(" ====================    ================ " + ANSI_RED + "   ================ " + ANSI_BLUE + "   ===============");
@@ -128,27 +131,46 @@ public class PostsInterface extends Interface {
                 proximoPost();
                 break;
             case 3:
-                System.out.println("Opção ainda não funciona!");
+                ComentarioInterface comentarioInterface = new ComentarioInterface(input,getPostagens().get(indiceUltimoPostExibido), this);
+                comentarioInterface.mostrarComentarios();
+                capturarOpcaoEscolhida();
                 break;
             case 4:
                 filtrarPostagens();
                 break;
             case 5:
-                if (getPostagens().get(indiceUltimoPostExibido).getAutor().equals(GerenciadorLogin.getUsuarioLogado())) {
-                    System.out.println("Opção ainda não funciona!");
+                //DELETAR só aparece para o criador da postagem. Logo, esse if verifica qual opção de vdd a pessoa quer
+                if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(GerenciadorLogin.getInstance().getUsuarioLogado())) {
+                    removerPostagemAtual();
                 } else {
                     voltar();
                 }
                 break;
             case 6:
-                if (getPostagens().get(indiceUltimoPostExibido).getAutor().equals(GerenciadorLogin.getUsuarioLogado())) {
+                //VOLTAR pode ser a opção de número 6 ou 5. Só é 6 quando existe a opçao DELETAR
+                if(getPostagens().get(indiceUltimoPostExibido).getAutor().equals(GerenciadorLogin.getInstance().getUsuarioLogado())) {
                     voltar();
                 } else {
                     System.out.println("Comando não disponível!");
+                    capturarOpcaoEscolhida();
                 }
             default:
                 System.out.println("Comando não disponível!");
                 capturarOpcaoEscolhida();
+        }
+    }
+
+    private void removerPostagemAtual() throws Exception {
+        Post postagemRemovida = Gerenciador.removerPostagem(getPostagens().get(indiceUltimoPostExibido));
+        if(postagemRemovida != null) {
+            postagens.remove(postagemRemovida);
+            if(postagensFiltradas != null)
+                postagensFiltradas.remove(postagemRemovida);
+            System.out.println("Postagem removida com sucesso!");
+            proximoPost();
+        } else {
+            System.err.println("Não foi possível remover essa postagem :/");
+            capturarOpcaoEscolhida();
         }
     }
 

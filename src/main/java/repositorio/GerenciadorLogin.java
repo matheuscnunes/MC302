@@ -106,4 +106,9 @@ public class GerenciadorLogin {
         usuarioLogado = monitoresAchados.get(0);
     }
 
+    public static Usuario deslogar() {
+        Usuario usuarioDeslogado = usuarioLogado;
+        usuarioLogado = null;
+        return usuarioDeslogado;
+    }
 }

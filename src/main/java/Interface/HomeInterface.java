@@ -2,6 +2,7 @@ package main.java.Interface;
 
 import main.java.repositorio.Gerenciador;
 import main.java.repositorio.GerenciadorLogin;
+import main.java.Interface.Posts.CriarPostsInterface;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -34,8 +35,13 @@ public class HomeInterface extends Interface {
                 postsInterface.exibirPost();
                 break;
             case 2:
+                CriarPostsInterface criarPostsInterface = new CriarPostsInterface(input);
+                criarPostsInterface.criarPost();
                 break;
             case 3:
+                GerenciadorLogin.getInstance().deslogar();
+                System.out.println("Bye, JAVAlis");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Comando não reconhecido!");
