@@ -591,33 +591,30 @@ public class Gerenciador {
         }
     }
 
-    //TODO: integração com parte de posts do Gerenciador
-
     public void adicionarPostEmTurma(Turma turma, Post post) {
         try {
             turma.adicionarPost(post);
+
+            if (post instanceof Conteudo) {
+                adicionarConteudo((Conteudo) post);
+            } else {
+                adicionarPergunta((Pergunta) post);
+            }
         } catch(Exception e) {
             e.printStackTrace();
-        }
-        if (post instanceof Conteudo) {
-            try {
-                adicionarConteudo((Conteudo)post);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                adicionarPergunta((Pergunta)post);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
     public boolean removerPostEmTurma(Turma turma, List<Post> posts) {
         try {
             if (posts instanceof Conteudo) {
-                removerConteudo(((Conteudo) posts).getID());
+                for (Post post : posts) {
+                    if (post instanceof Conteudo) {
+                        removerConteudo(post.getID());
+                    } else {
+                        removerPergunta(post.getID());
+                    }
+                }
             }
             return turma.removerPost(posts);
         } catch(Exception e) {
@@ -628,6 +625,11 @@ public class Gerenciador {
 
     public boolean removerPostEmTurma(Turma turma, Post post) {
         try {
+            if (post instanceof Conteudo) {
+                removerConteudo(post.getID());
+            } else {
+                removerPergunta(post.getID());
+            }
             return turma.removerPost(post);
         } catch(Exception e) {
             e.printStackTrace();
@@ -637,6 +639,11 @@ public class Gerenciador {
 
     public Post removerPostEmTurma(Turma turma, int id) {
         try {
+            if (buscaConteudo(id) != null) {
+                removerConteudo(id);
+            } else {
+                removerPergunta(id);
+            }
             return turma.removerPost(id);
         } catch(Exception e) {
             e.printStackTrace();
