@@ -1,10 +1,8 @@
-package main.java.Interface.Login;
+package main.java.Interface;
 
-import main.java.Interface.Interface;
-import main.java.entity.Gerenciador;
-import main.java.entity.member.Aluno;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.TipoDeUsuario;
-import main.java.entity.member.Usuario;
+import main.java.repositorio.GerenciadorLogin;
 
 import java.util.Scanner;
 
@@ -16,16 +14,16 @@ public class LoginInterface extends Interface {
         this.TIPO_USUARIO = tipoUsuario;
     }
 
-    public boolean apresentarLogin() {
+    public boolean apresentarLogin() throws Exception {
         System.out.println("\n//////////////////////////////////////////\n");
-        String email = LoginHelper.obtemEmail(input);
+        String email = PrincipalAluno.obtemEmail(input);
         System.out.print("\nDigite sua senha: ");
         String senha = input.next();
 
         return validarLogin(email, senha);
     }
 
-    private boolean validarLogin(String email, String senha) {
-        return Gerenciador.login(TIPO_USUARIO, email, senha);
+    private boolean validarLogin(String email, String senha) throws Exception {
+        return GerenciadorLogin.login(TIPO_USUARIO, email, senha);
     }
 }

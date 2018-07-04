@@ -1,6 +1,6 @@
 package main.java.entity.member;
 
-public class Usuario {
+public abstract class Usuario {
     private static final int MIN_NOME_LENGTH = 3;
 
     public final int id;

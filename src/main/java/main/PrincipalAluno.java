@@ -1,7 +1,8 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.Aluno;
+import main.java.repositorio.GerenciadorAluno;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -20,7 +21,12 @@ public class PrincipalAluno {
 
             switch (op) {
                 case 1:
-                    addAluno(input);
+                    try {
+                        addAluno(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 2:
                     buscarAluno(input);
@@ -40,7 +46,7 @@ public class PrincipalAluno {
         main(input);
     }
 
-    private static void addAluno(Scanner input) {
+    private static void addAluno(Scanner input) throws Exception{
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
@@ -55,7 +61,7 @@ public class PrincipalAluno {
         senha = input.next();
 
         Aluno novoAluno = new Aluno(1, ra, curso, nome, email, senha);
-        Gerenciador.adicionarAluno(novoAluno);
+        GerenciadorAluno.getInstance().add(novoAluno);
 
         System.out.println("Aluno adicionado!");
     }
@@ -104,7 +110,13 @@ public class PrincipalAluno {
 
     private static void buscarAluno(Scanner input) {
         int ra = obtemRa(input);
-        Aluno alunoEncontrado = Gerenciador.buscaAluno(ra);
+        Aluno alunoEncontrado = null;
+        try {
+            alunoEncontrado = GerenciadorAluno.getInstance().find(ra);
+        } catch (Exception e) {
+            System.err.println("Não foi possível encontrar aluno por ra. Message: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         if (alunoEncontrado != null) {
             System.out.println(alunoEncontrado.toString());

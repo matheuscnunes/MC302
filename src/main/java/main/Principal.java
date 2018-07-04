@@ -13,7 +13,14 @@ public class Principal {
         GeradorDados.gerarDados();
         Scanner input = new Scanner(System.in);
 
-        TelaInicialInterface telaQuente = new TelaInicialInterface(input);
-        telaQuente.boasVindas();
+        try {
+            TelaInicialInterface telaQuente = new TelaInicialInterface(input);
+            telaQuente.boasVindas();
+        } catch (Exception e) {
+            System.out.println("Erro ao executar a main. Mensagem: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
+
+

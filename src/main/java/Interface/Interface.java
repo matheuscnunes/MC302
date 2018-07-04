@@ -19,46 +19,47 @@ public abstract class Interface {
         this.input = input;
     }
 
+
     // - Mark: PRINT
-    protected final void printAzul(String texto) {
+    protected void printAzul(String texto) {
         System.out.print(ANSI_BLUE + texto + ANSI_RESET);
     }
 
-    protected final void printRoxo(String texto) {
+    protected void printRoxo(String texto) {
         System.out.print(ANSI_PURPLE + texto + ANSI_RESET);
     }
 
-    protected final void printAmarelo(String texto) {
+    protected void printAmarelo(String texto) {
         System.out.print(ANSI_YELLOW + texto + ANSI_RESET);
     }
 
-    protected final void printVermelho(String texto) {
+    protected void printVermelho(String texto) {
         System.out.print(ANSI_YELLOW + texto + ANSI_RESET);
     }
 
-    protected final void printPreto(String texto) {
+    protected void printPreto(String texto) {
         System.out.print(ANSI_BLACK + texto + ANSI_RESET);
     }
 
     // - Mark: PRINTLN
 
-    protected final void printlnAzul(String texto) {
+    protected void printlnAzul(String texto) {
         System.out.println(ANSI_BLUE + texto + ANSI_RESET);
     }
 
-    protected final void printlnRoxo(String texto) {
+    protected void printlnRoxo(String texto) {
         System.out.println(ANSI_PURPLE + texto + ANSI_RESET);
     }
 
-    protected final void printlnAmarelo(String texto) {
+    protected void printlnAmarelo(String texto) {
         System.out.println(ANSI_YELLOW + texto + ANSI_RESET);
     }
 
-    protected final void printlnVermelho(String texto) {
+    protected void printlnVermelho(String texto) {
         System.out.println(ANSI_RED + texto + ANSI_RESET);
     }
 
-    protected final void printlnPreto(String texto) {
+    protected void printlnPreto(String texto) {
         System.out.println(ANSI_BLACK + texto + ANSI_RESET);
     }
 }

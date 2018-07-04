@@ -1,8 +1,10 @@
-package main.java.Interface.Login;
+package main.java.Interface;
 
-import main.java.Interface.Interface;
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.*;
+import main.java.repositorio.GerenciadorAluno;
+import main.java.repositorio.GerenciadorMonitor;
+import main.java.repositorio.GerenciadorProfessor;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -15,21 +17,21 @@ public class CadastrarInterface extends Interface {
         this.TIPO_USUARIO = tipoUsuario;
     }
 
-    public void apresentarCadastro() {
+    public void apresentarCadastro() throws Exception{
         switch (TIPO_USUARIO) {
             case ALUNO:
                 Aluno aluno = cadastroAluno();
-                Gerenciador.adicionarAluno(aluno);
+                GerenciadorAluno.getInstance().add(aluno);
                 System.out.println("Aluno adicionado!");
                 break;
             case PROFESSOR:
                 Professor prof = cadastroProfessor();
-                Gerenciador.adicionarProfessor(prof);
+                GerenciadorProfessor.getInstance().add(prof);
                 System.out.println("Professor adicionado!");
                 break;
             case MONITOR:
                 Monitor monitor = cadastroMonitor();
-                Gerenciador.adicionarMonitor(monitor);
+                GerenciadorMonitor.getInstance().add(monitor);
                 System.out.println("Monitor adicionado!");
                 break;
         }
@@ -39,9 +41,9 @@ public class CadastrarInterface extends Interface {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        ra = LoginHelper.obtemRa(input);
+        ra = obtemRa();
         curso = obtemCurso();
-        email = LoginHelper.obtemEmail(input);
+        email = PrincipalAluno.obtemEmail(input);
 
         System.out.print("Digite seu nome: ");
         nome = input.next();
@@ -55,7 +57,7 @@ public class CadastrarInterface extends Interface {
 
     private Professor cadastroProfessor() {
         String email = "", nome, senha;
-        email = LoginHelper.obtemEmail(input);
+        email = PrincipalAluno.obtemEmail(input);
 
         System.out.print("Digite o nome: ");
         nome = input.next();
@@ -71,9 +73,9 @@ public class CadastrarInterface extends Interface {
         int ra = 0, curso = 0;
         String email = "", nome, senha;
 
-        ra = LoginHelper.obtemRa(input);
+        ra = obtemRa();
         curso = obtemCurso();
-        email = LoginHelper.obtemEmail(input);
+        email = PrincipalAluno.obtemEmail(input);
 
         System.out.print("Digite seu nome: ");
         nome = input.next();
@@ -83,6 +85,20 @@ public class CadastrarInterface extends Interface {
 
         Monitor novoMonitor = new Monitor(1, ra, curso, nome, email, senha);
         return novoMonitor;
+    }
+
+    private int obtemRa() {
+        String strRa = "";
+        do {
+            if (!strRa.trim().equals("")) {
+                System.out.println("RA inválido");
+            }
+
+            System.out.print("Digite o RA: ");
+            strRa = input.next();
+
+        } while(strRa.trim().length() != 6 || !Utils.isNumeric(strRa));
+        return Integer.parseInt(strRa);
     }
 
     private int obtemCurso() {

@@ -1,7 +1,8 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.Disciplina;
+import main.java.repositorio.GerenciadorDisciplina;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -22,10 +23,20 @@ public class PrincipalDisciplina {
                     addDisciplina(input);
                     break;
                 case 2:
-                    buscarDisciplina(input);
+                    try {
+                        buscarDisciplina(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 3:
-                    removeDisciplina(input);
+                    try {
+                        removeDisciplina(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     break;
@@ -53,7 +64,7 @@ public class PrincipalDisciplina {
 
         try {
             Disciplina disc = new Disciplina(id, nome, codigo);
-            Gerenciador.adicionarDisciplina(disc);
+            GerenciadorDisciplina.getInstance().add(disc);
             System.out.println("Disciplina adicionada com sucesso");
 
         } catch (Exception e) {
@@ -76,13 +87,13 @@ public class PrincipalDisciplina {
         return Integer.parseInt(strId);
     }
 
-    private static void buscarDisciplina(Scanner input) {
+    private static void buscarDisciplina(Scanner input) throws Exception{
         String codigo;
 
         System.out.println("Digite o código da disciplina:");
         codigo = input.next();
 
-        Disciplina discEncontrada = Gerenciador.buscaDisciplina(codigo);
+        Disciplina discEncontrada = GerenciadorDisciplina.getInstance().find(codigo);
 
         if (discEncontrada != null) {
             System.out.println(discEncontrada.toString());
@@ -91,13 +102,13 @@ public class PrincipalDisciplina {
         }
     }
 
-    private static void removeDisciplina(Scanner input) {
+    private static void removeDisciplina(Scanner input) throws Exception{
         String codigo;
 
         System.out.println("Digite o código da disciplina:");
         codigo = input.next();
 
-        Disciplina discRemovida = Gerenciador.removerDisciplina(codigo);
+        Disciplina discRemovida = GerenciadorDisciplina.getInstance().remover(codigo);
 
         if (discRemovida != null) {
             System.out.println("A disciplina " + discRemovida.getNome() + " de codigo " + codigo + " foi removida");

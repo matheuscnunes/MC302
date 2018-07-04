@@ -2,13 +2,13 @@ package main.java.Interface.Posts;
 
 import main.java.Interface.HomeInterface;
 import main.java.Interface.Interface;
-import main.java.entity.Gerenciador;
-import main.java.entity.content.Comentario;
+import main.java.entity.GeradorSequencia;
+import main.java.entity.Turma;
 import main.java.entity.content.Conteudo;
 import main.java.entity.content.Pergunta;
-import main.java.entity.content.Post;
 import main.java.entity.member.Usuario;
-import sun.management.HotspotMemoryMBean;
+import main.java.repositorio.GerenciadorLogin;
+import main.java.repositorio.GerenciadorTurma;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -22,10 +22,10 @@ public class CriarPostsInterface extends Interface {
     public void criarPost() {
 
         try {
-            int tipoDePost;
-            int ID = Gerenciador.proximoId();
+            int tipoDePost, idTurma;
+            int ID = GeradorSequencia.nextSequencia();
             Date date = new Date();
-            Usuario autor = Gerenciador.getUsuarioLogado();
+            Usuario autor = GerenciadorLogin.getInstance().getUsuarioLogado();
             String tituloPost, conteudo;
 
             printlnAmarelo("\nCriando um novo post...");
@@ -39,18 +39,21 @@ public class CriarPostsInterface extends Interface {
             System.out.println("Insira o conteúdo do post: ");
             conteudo = input.next() + input.nextLine();
 
+            System.out.println("Insira o id de uma turma na qual esse post será adicionado : ");
+            idTurma = input.nextInt();
+
+            Turma turma = GerenciadorTurma.getInstance().find(idTurma);
             if (tipoDePost == 1) {
                 Conteudo novoPost = new Conteudo(ID, date, autor, conteudo, tituloPost);
-                Gerenciador.adicionarConteudo(novoPost);
-                printlnRoxo("\nConteúdo adicionado com sucesso!\n");
+                turma.addPost(novoPost);
+                printlnRoxo("\nConteúdo adicionado com sucesso na turma!\n");
             } else if (tipoDePost == 2) {
                 Pergunta novoPost = new Pergunta(ID, date, autor, conteudo, tituloPost, false);
-                Gerenciador.adicionarPergunta(novoPost);
-                printlnRoxo("\nPergunta adicionada com sucesso!\n");
+                turma.addPost(novoPost);
+                printlnRoxo("\nPergunta adicionada com sucesso na turma!\n");
             }
             sair();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("\nNão foi possível adicionar o comentário: ");
             e.printStackTrace();
             sair();
@@ -65,7 +68,12 @@ public class CriarPostsInterface extends Interface {
     }
 
     private void sair() {
-        HomeInterface homeInterface = new HomeInterface(input);
-        homeInterface.exibirHome();
+        try {
+            HomeInterface homeInterface = new HomeInterface(input);
+            homeInterface.exibirHome();
+        } catch (Exception e) {
+            System.err.println("Não foi possível exibir a home. Message: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

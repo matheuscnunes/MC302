@@ -1,8 +1,8 @@
 package main.java.Interface;
 
+import main.java.repositorio.Gerenciador;
+import main.java.repositorio.GerenciadorLogin;
 import main.java.Interface.Posts.CriarPostsInterface;
-import main.java.Interface.Posts.PostsInterface;
-import main.java.entity.Gerenciador;
 import main.java.utils.Utils;
 
 import java.util.Scanner;
@@ -11,8 +11,8 @@ public class HomeInterface extends Interface {
 
     public HomeInterface(Scanner input) { super(input); }
 
-    public void exibirHome() {
-        Utils.stringPrinter("Bem-vindo, %s!\n", Gerenciador.getUsarioAtual().getNome());
+    public void exibirHome() throws Exception{
+        Utils.stringPrinter("Bem-vindo, %s!\n", GerenciadorLogin.getInstance().getUsuarioLogado().getNome());
 
         System.out.println("Digite o número da opção desejada e aperte enter:");
         mostrarOpcoesHome();
@@ -27,7 +27,7 @@ public class HomeInterface extends Interface {
         System.out.println("--------------------");
     }
 
-    private void capturarOpcaoEscolhida() {
+    private void capturarOpcaoEscolhida() throws Exception{
         int op = input.nextInt();
         switch(op) {
             case 1:
@@ -39,7 +39,7 @@ public class HomeInterface extends Interface {
                 criarPostsInterface.criarPost();
                 break;
             case 3:
-                Gerenciador.deslogar();
+                GerenciadorLogin.getInstance().deslogar();
                 System.out.println("Bye, JAVAlis");
                 System.exit(0);
                 break;

@@ -1,15 +1,18 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.entity.GeradorSequencia;
+import main.java.entity.Turma;
+import main.java.entity.content.Post;
+import main.java.repositorio.*;
 import main.java.entity.content.Comentario;
 import main.java.entity.content.Conteudo;
-import main.java.entity.member.Aluno;
 import main.java.entity.member.Usuario;
-import main.java.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class PrincipalConteudo {
 
@@ -34,10 +37,19 @@ public class PrincipalConteudo {
                     buscarConteudoPorId(input);
                     break;
                 case 3:
-                    buscarConteudosPorAutor(input);
+                    try {
+                        buscarConteudosPorAutor(input);
+                    }
+                    catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
                 case 4:
-                    buscarConteudos();
+                    try {
+                        buscarConteudos();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 5:
                     adicionarComentario(input);
@@ -46,7 +58,11 @@ public class PrincipalConteudo {
                     removerComentario(input);
                     break;
                 case 7:
-                    removerConteudo(input);
+                    try {
+                        removerConteudo(input);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 8:
                     Principal.main(new String[]{});
@@ -91,9 +107,27 @@ public class PrincipalConteudo {
         }
 
         System.out.println("Digite o texto do comentário : ");
+        final int id = conteudoId;
         try {
             String comentario = input.next();
-            Gerenciador.adicionarComentarioEmConteudo(conteudoId, comentario);
+            List<Turma> turmas = GerenciadorTurma.getInstance().buscarTodos();
+            Post postProcurado = null;
+            for (Turma turma : turmas){
+                List<Post> posts = turma.getPosts().stream().filter(post -> {
+                    return post.getID() == id;
+                }).collect(Collectors.toList());
+                if (posts != null &&  !posts.isEmpty()){
+                    postProcurado = posts.get(0);
+                    break;
+                }
+            }
+            if (postProcurado instanceof Conteudo){
+                Conteudo conteudo = (Conteudo)postProcurado;
+                Usuario usuario = GerenciadorLogin.getInstance().getUsuarioLogado();
+                Comentario comentarioObj = new Comentario(GeradorSequencia.nextSequencia(), new Date(), usuario,
+                        comentario, true, "");
+                conteudo.addComentario(comentarioObj);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -105,12 +139,33 @@ public class PrincipalConteudo {
         try{
             System.out.println("Digite o id do comentário para remover : ");
             comentarioId = input.nextInt();
-            Comentario comentarioRemovido = Gerenciador.removerComentarioEmConteudo(comentarioId);
-            if (comentarioRemovido == null){
+            List<Turma> turmas = GerenciadorTurma.getInstance().buscarTodos();
+            boolean isComentarioRemovido = false;
+            Comentario comentarioParaRemover = null;
+            for (Turma turma : turmas){
+                List<Post> posts = turma.getPosts();
+                for (Post post : posts){
+                    List<Comentario> comentarios = post.getComentarios();
+                    for (Comentario comentario : comentarios){
+                        if (comentario.getID() == comentarioId){
+                            comentarioParaRemover = comentario;
+                            break;
+                        }
+                    }
+                    if (comentarioParaRemover != null){
+                        isComentarioRemovido = post.getComentarios().remove(comentarioParaRemover);
+                        break;
+                    }
+                }
+                if (isComentarioRemovido){
+                    break;
+                }
+            }
+            if (comentarioParaRemover == null || !isComentarioRemovido){
                 System.out.println("Não existe nenhum comentário com esse ID");
             }
             else{
-                System.out.println("Comentário (" + comentarioRemovido.getTexto() + ") removido com sucesso !");
+                System.out.println("Comentário (" + comentarioParaRemover.getTexto() + ") removido com sucesso !");
             }
         }
         catch (Exception e) {
@@ -119,12 +174,29 @@ public class PrincipalConteudo {
         }
     }
 
-    private static void removerConteudo(Scanner input){
+    private static void removerConteudo(Scanner input) throws Exception{
         int conteudoId = 0;
         try{
             System.out.println("Digite o id do conteúdo para remover : ");
             conteudoId = input.nextInt();
-            Conteudo conteudoRemovido = Gerenciador.removerConteudo(conteudoId);
+            final int id = conteudoId;
+            List<Turma> turmas = GerenciadorTurma.getInstance().buscarTodos();
+            Post postProcurado = null;
+            Conteudo conteudoRemovido = null;
+            for (Turma turma : turmas){
+                List<Post> posts = turma.getPosts().stream().filter(post -> {
+                    return post.getID() == id;
+                }).collect(Collectors.toList());
+                if (posts != null && !posts.isEmpty()){
+                    postProcurado = posts.get(0);
+                    if (postProcurado instanceof Conteudo){
+                        conteudoRemovido = (Conteudo)postProcurado;
+                        posts.remove(postProcurado);
+                    }
+                    break;
+                }
+            }
+
             if (conteudoRemovido == null){
                 System.out.println("Não existe nenhum conteúdo com esse ID");
             }
@@ -138,8 +210,18 @@ public class PrincipalConteudo {
         }
     }
 
-    private static void buscarConteudos(){
-        List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos();
+    private static void buscarConteudos() throws Exception{
+        List<Conteudo> conteudosBuscados = new ArrayList<Conteudo>();
+        List<Turma> turmas = GerenciadorTurma.getInstance().buscarTodos();
+        for (Turma turma : turmas){
+            List<Post> posts = turma.getPosts();
+            for (Post post : posts){
+                if (post instanceof Conteudo){
+                    Conteudo conteudo = (Conteudo)post;
+                    conteudosBuscados.add(conteudo);
+                }
+            }
+        }
         if (conteudosBuscados != null){
             for (Conteudo conteudo : conteudosBuscados){
                 exibirConteudo(conteudo);
@@ -147,7 +229,7 @@ public class PrincipalConteudo {
         }
     }
 
-    private static void buscarConteudosPorAutor(Scanner input){
+    private static void buscarConteudosPorAutor(Scanner input) throws Exception{
         String autor = "";
         do{
             System.out.println("Digite o nome do autor para buscar os conteúdos : ");
@@ -155,7 +237,20 @@ public class PrincipalConteudo {
         }
         while (autor.trim().equals(""));
 
-        List<Conteudo> conteudosBuscados = Gerenciador.buscaConteudos(autor);
+        List<Conteudo> conteudosBuscados = new ArrayList<Conteudo>();
+        List<Turma> turmas = GerenciadorTurma.getInstance().buscarTodos();
+        for (Turma turma : turmas){
+            List<Post> posts = turma.getPosts();
+            for (Post post : posts){
+                if (post instanceof Conteudo){
+                    Conteudo conteudo = (Conteudo)post;
+                    if (conteudo.getAutor().getNome().equals(autor)) {
+                        conteudosBuscados.add(conteudo);
+                    }
+                }
+            }
+        }
+
         if (conteudosBuscados == null || conteudosBuscados.isEmpty()){
             System.out.println("Não existe nenhum conteúdo publicado por esse autor");
         }
@@ -175,12 +270,12 @@ public class PrincipalConteudo {
         catch (Exception e) {
             buscarConteudoPorId(input);
         }
-        Conteudo conteudoPesquisado = Gerenciador.buscaConteudo(conteudoId);
+        Conteudo conteudoPesquisado = GerenciadorConteudo.buscaConteudo(conteudoId);
         exibirConteudo(conteudoPesquisado);
     }
 
     private static void addConteudo(Scanner input) {
-        Usuario usuarioPostagem = Gerenciador.getUsuarioLogado();
+        Usuario usuarioPostagem = GerenciadorLogin.getInstance().getUsuarioLogado();
         if (usuarioPostagem == null) {
             System.out.println("Você precisa fazer o login antes de realizar essa operação");
         }
@@ -199,10 +294,16 @@ public class PrincipalConteudo {
             while (texto.trim().equals(""));
 
             Date dataPostagem = new Date();
-            Conteudo conteudo = new Conteudo(Gerenciador.proximoId(), dataPostagem, usuarioPostagem, texto, titulo);
+            Conteudo conteudo = new Conteudo(GeradorSequencia.nextSequencia(), dataPostagem, usuarioPostagem, texto, titulo);
             try {
-                Gerenciador.adicionarConteudo(conteudo);
-                System.out.println("Conteúdo adicionado!");
+                System.out.println("Digite o id da turma : ");
+                int id_turma = input.nextInt();
+                Turma turma = GerenciadorTurma.getInstance().find(id_turma);
+
+                if (turma != null) {
+                    turma.addPost(conteudo);
+                    System.out.println("Conteúdo adicionado!");
+                }
             }
             catch (Exception e){
                 e.printStackTrace();

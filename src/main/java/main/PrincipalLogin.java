@@ -1,11 +1,10 @@
 package main.java.main;
 
-import main.java.entity.Gerenciador;
+import main.java.repositorio.Gerenciador;
 import main.java.entity.member.TipoDeUsuario;
+import main.java.repositorio.GerenciadorLogin;
 import main.java.utils.Utils;
 
-import javax.xml.transform.sax.SAXSource;
-import java.io.Console;
 import java.util.Scanner;
 
 
@@ -20,7 +19,12 @@ public class PrincipalLogin {
         boolean login = false;
 
         while(login == false){
-            login = login(input);
+            try {
+                login = login(input);
+            }
+            catch (Exception e){
+                System.err.println(e.getMessage());
+            }
 
             if(login){
                 Principal.main(null);
@@ -30,14 +34,14 @@ public class PrincipalLogin {
         }
     }
 
-    public static boolean login(Scanner input) {
+    public static boolean login(Scanner input) throws Exception{
         String email = "", senha;
 
         email = obtemEmail(input);
 
         senha = obtemSenha(input);
 
-        return Gerenciador.login(TipoDeUsuario.ALUNO, email, senha);
+        return GerenciadorLogin.login(TipoDeUsuario.ALUNO, email, senha);
     }
 
     private static String obtemEmail(Scanner input) {
