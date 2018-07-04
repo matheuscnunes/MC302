@@ -274,8 +274,10 @@ public class PrincipalPergunta {
             Date dataPostagem = new Date();
             Pergunta pergunta = new Pergunta(GeradorSequencia.nextSequencia(), dataPostagem, usuarioPostagem, texto, titulo, false);
             try {
-                // TODO: Pedir a turma antes de adicionar a pergunta
-                Gerenciador.adicionarPergunta(pergunta);
+                System.out.println("Insira o id de uma turma na qual esse post será adicionado : ");
+                int idTurma = input.nextInt();
+                Turma turma = GerenciadorTurma.getInstance().find(idTurma);
+                turma.addPost(pergunta);
                 System.out.println("Pergunta adicionada!");
             } catch (Exception e) {
                 e.printStackTrace();

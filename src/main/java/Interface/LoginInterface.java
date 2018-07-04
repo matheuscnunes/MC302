@@ -2,6 +2,7 @@ package main.java.Interface;
 
 import main.java.repositorio.Gerenciador;
 import main.java.entity.member.TipoDeUsuario;
+import main.java.repositorio.GerenciadorLogin;
 
 import java.util.Scanner;
 
@@ -23,6 +24,6 @@ public class LoginInterface extends Interface {
     }
 
     private boolean validarLogin(String email, String senha) throws Exception {
-        return Gerenciador.login(TIPO_USUARIO, email, senha);
+        return GerenciadorLogin.login(TIPO_USUARIO, email, senha);
     }
 }

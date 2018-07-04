@@ -1,6 +1,5 @@
 package main.java.Interface;
 
-import javafx.geometry.Pos;
 import main.java.Interface.Comentarios.ComentarioInterface;
 import main.java.Interface.HomeInterface;
 import main.java.Interface.Interface;
